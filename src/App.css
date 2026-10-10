@@ -6,10 +6,6 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: var(--font-sans);
-}
-
 /* Utility classes */
 .container {
   max-width: 1400px;

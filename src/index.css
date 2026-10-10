@@ -1,55 +1,251 @@
-/* Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+/* ==========================================================================
+   Percepta design tokens + shared primitives
+   Palette is drawn from the blingify / Popcraft feed: pastel color blocks,
+   chunky ink outlines, polka dots, and a grape-purple accent.
+   Page files (Landing.css, Auth.css, ...) only hold page-specific layout.
+   ========================================================================== */
 
 :root {
-  --navy:       #1c2a86;
-  --navy-deep:  #12185a;
-  --navy-mid:   #1a2470;
-  --amber:      #f4a72b;
-  --amber-deep: #d98a12;
-  --paper:      #fdfcf6;
-  --ink:        #12142c;
-  --muted:      #585c78;
-  --line:       #12142c;
-  --success:    #1f8a5c;
-  --danger:     #c2412c;
-  --radius:     12px;
+  /* Color */
+  --ink:        #1F1535;   /* outlines + text */
+  --ink-soft:   #4A3F66;   /* secondary text */
+  --cream:      #FFFBEA;   /* page */
+  --white:      #FFFFFF;
+  --butter:     #FFEF9E;
+  --blush:      #FFD3EA;
+  --bubblegum:  #FF8CC8;   /* primary action */
+  --bubblegum-deep: #FF74BC;
+  --lilac:      #EFE8FF;
+  --lavender:   #D6C8FB;
+  --grape:      #6D42DB;   /* accent / links */
+  --mint:       #C2F2D4;
+  --sky:        #C3E9F8;
+  --success:    #17794F;
+  --danger:     #B3261E;
+
+  /* Type */
+  --font-display: 'Fredoka Variable', 'Fredoka', 'Nunito', system-ui, sans-serif;
+  --font-sans:    'DM Sans Variable', 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Shape: radius steps with hierarchy (buttons < cards < panels) */
+  --r-sm: 12px;
+  --r-md: 20px;
+  --r-lg: 28px;
+
+  /* Sticker shadows are solid, never blurred */
+  --shadow-sm: 3px 3px 0 var(--ink);
+  --shadow-md: 5px 5px 0 var(--ink);
+  --shadow-lg: 8px 8px 0 var(--ink);
+
+  --dots: radial-gradient(rgba(109, 66, 219, 0.16) 1.6px, transparent 2.1px);
 }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; }
+html, body { margin: 0; padding: 0; min-height: 100%; }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  background: var(--navy-deep);
+  background-color: var(--cream);
+  background-image: var(--dots);
+  background-size: 26px 26px;
   color: var(--ink);
   min-height: 100vh;
 }
 
-h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.01em; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; }
-::selection { background: var(--amber); color: var(--ink); }
+::selection { background: var(--bubblegum); color: var(--ink); }
+
+:focus-visible {
+  outline: 3px solid var(--grape);
+  outline-offset: 3px;
+}
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(28,42,134,0.4); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(244,167,43,0.5); }
+::-webkit-scrollbar-thumb { background: var(--lavender); border: 2px solid var(--ink); border-radius: 999px; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
 .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Hard-shadow card utility */
-.hardcard {
-  background: var(--paper);
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: 6px 6px 0 rgba(0,0,0,0.28);
+/* --------------------------------------------------------------------------
+   Logo
+   -------------------------------------------------------------------------- */
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.logo-accent { color: var(--grape); }
+
+/* --------------------------------------------------------------------------
+   Buttons: one recipe, applied to every primary action in the app
+   -------------------------------------------------------------------------- */
+.btn-cta, .btn-primary, .btn-submit, .btn-verify, .btn-reset, .btn-upload,
+.btn-secondary, .btn-view, .btn-view-all, .btn-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.2;
+  padding: 0.85rem 1.6rem;
+  color: var(--ink);
+  background: var(--bubblegum);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
 }
 
-/* App shell background */
-.app-bg {
-  background: linear-gradient(180deg, #0e1450 0%, #12185a 100%);
+.btn-cta:hover, .btn-primary:hover, .btn-submit:hover, .btn-verify:hover,
+.btn-reset:hover, .btn-upload:hover {
+  background: var(--bubblegum-deep);
+  transform: translate(-1px, -1px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.btn-secondary { background: var(--white); }
+.btn-secondary:hover, .btn-view-all:hover { background: var(--butter); transform: translate(-1px, -1px); box-shadow: 6px 6px 0 var(--ink); }
+
+.btn-view { background: var(--grape); color: var(--white); font-size: 0.95rem; padding: 0.55rem 1.1rem; box-shadow: var(--shadow-sm); }
+.btn-view:hover { background: #5B33C4; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+
+.btn-view-all { background: var(--white); width: 100%; box-shadow: var(--shadow-sm); font-size: 0.95rem; }
+
+.btn-logout { background: var(--white); color: var(--danger); width: 100%; padding: 0.65rem; font-size: 0.95rem; box-shadow: var(--shadow-sm); }
+.btn-logout:hover { background: #FFE3E0; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+
+.btn-cta:active, .btn-primary:active, .btn-submit:active, .btn-verify:active,
+.btn-reset:active, .btn-upload:active, .btn-secondary:active, .btn-view:active,
+.btn-view-all:active, .btn-logout:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.btn-submit, .btn-verify, .btn-reset { width: 100%; margin-top: 0.25rem; }
+.btn-cta, .btn-secondary { font-size: 1.15rem; padding: 1rem 2rem; }
+
+button:disabled, .btn-submit:disabled, .btn-verify:disabled, .btn-reset:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* --------------------------------------------------------------------------
+   Forms
+   -------------------------------------------------------------------------- */
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.form-group label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.form-group input,
+.otp-input {
+  padding: 0.8rem 1rem;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--white);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  transition: box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.form-group input::placeholder { color: #8A7FA6; }
+
+.form-group input:focus,
+.otp-input:focus {
+  outline: 3px solid transparent;           /* keeps a visible ring in forced-colors mode */
+  background: #FBF8FF;
+  box-shadow: 0 0 0 4px var(--lavender), 3px 3px 0 var(--grape);
+}
+
+.form-error {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #7A140F;
+  background: #FFE3E0;
+  border: 2px solid var(--danger);
+  border-radius: var(--r-sm);
+}
+
+/* --------------------------------------------------------------------------
+   Auth-style page shells (login, register, verify, reset)
+   -------------------------------------------------------------------------- */
+.auth-page, .verify-page, .reset-page {
   min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-card, .verify-card, .reset-card {
+  background: var(--white);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-lg);
+  padding: 2.75rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-title, .verify-title, .reset-title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+}
+
+.auth-subtitle, .verify-subtitle, .reset-subtitle {
+  text-align: center;
+  color: var(--ink-soft);
+  margin: 0 0 2rem;
+}
+
+.auth-switch, .back-link, .resend-text {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  margin: 1.5rem 0 0;
+}
+
+.auth-link, .link, .forgot-link, .resend-btn {
+  color: var(--grape);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--lavender);
+  transition: text-decoration-color 0.12s ease;
+}
+.auth-link:hover, .link:hover, .forgot-link:hover, .resend-btn:hover { text-decoration-color: var(--grape); }
+.resend-btn { background: none; border: none; padding: 0; font-size: inherit; }
+
+@media (max-width: 640px) {
+  .auth-page, .verify-page, .reset-page { padding: 1rem; }
+  .auth-card, .verify-card, .reset-card { padding: 1.75rem 1.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
