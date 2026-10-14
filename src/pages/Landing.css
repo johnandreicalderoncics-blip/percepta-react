@@ -86,8 +86,192 @@
 .tag:nth-child(3) { background: var(--sky); }
 
 /* --------------------------------------------------------------------------
-   Ticket (sample result)
+   Login Ticket (replaces sample result with actual login form)
    -------------------------------------------------------------------------- */
+.login-ticket {
+  justify-self: center;
+  width: 100%;
+  max-width: 26rem;
+  background: var(--white);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-lg);
+  box-shadow: 9px 9px 0 var(--grape);
+  transform: rotate(2deg);
+  animation: ticket-settle 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+}
+
+.login-ticket .ticket-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 2.5px dashed var(--ink);
+}
+
+.login-ticket .ticket-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.login-ticket .ticket-badge {
+  flex-shrink: 0;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--sky);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+}
+
+.login-form {
+  padding: 1.5rem 1.5rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.login-form .form-group label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.login-form .form-group input {
+  padding: 0.75rem 0.95rem;
+  font-size: 0.95rem;
+  font: inherit;
+  color: var(--ink);
+  background: var(--cream);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  transition: box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.login-form .form-group input::placeholder {
+  color: #8A7FA6;
+}
+
+.login-form .form-group input:focus {
+  outline: 3px solid transparent;
+  background: var(--white);
+  box-shadow: 0 0 0 3px var(--lavender), 3px 3px 0 var(--grape);
+}
+
+.login-form .form-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -0.25rem;
+}
+
+.login-form .forgot-link {
+  font-size: 0.85rem;
+  color: var(--grape);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--lavender);
+  transition: text-decoration-color 0.12s ease;
+}
+
+.login-form .forgot-link:hover {
+  text-decoration-color: var(--grape);
+}
+
+.login-form .btn-submit {
+  margin-top: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--ink);
+  background: var(--bubblegum);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.login-form .btn-submit:hover:not(:disabled) {
+  background: var(--bubblegum-deep);
+  transform: translate(-1px, -1px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.login-form .btn-submit:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.login-form .btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-ticket .form-error {
+  margin: 1rem 1.5rem 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #7A140F;
+  background: #FFE3E0;
+  border: 2px solid var(--danger);
+  border-radius: var(--r-sm);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.25rem 1.5rem 0.5rem;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 2px dashed var(--lavender);
+}
+
+.auth-divider span {
+  padding: 0 0.75rem;
+}
+
+.auth-switch {
+  text-align: center;
+  padding: 0 1.5rem 1.5rem;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.auth-link {
+  color: var(--grape);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--lavender);
+  transition: text-decoration-color 0.12s ease;
+}
+
+.auth-link:hover {
+  text-decoration-color: var(--grape);
+}
+
+/* Keep the original ticket styles for reference/other pages if needed */
 .ticket {
   justify-self: center;
   width: 100%;
