@@ -1,232 +1,71 @@
 .landing-page { position: relative; }
 
 /* --------------------------------------------------------------------------
-   Hero: a shopfront. Header is the sign, the striped awning is the one
-   loud element, and the ticket is the product's actual output.
+   Auth Container (two-column layout)
    -------------------------------------------------------------------------- */
-.hero-section {
-  --awning-w: 56px;
-  position: relative;
-  overflow: hidden;
-  padding: calc(var(--awning-w) + 2.75rem) 2rem 4.5rem;
-}
-
-.hero-section::before,
-.hero-section::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  background: repeating-linear-gradient(90deg, var(--grape) 0 var(--awning-w), var(--white) var(--awning-w) calc(var(--awning-w) * 2));
-}
-
-.hero-section::before {
-  top: 0;
-  height: var(--awning-w);
-}
-
-/* Scalloped lip: one half-circle per stripe */
-.hero-section::after {
-  top: var(--awning-w);
-  height: calc(var(--awning-w) / 2);
-  -webkit-mask: radial-gradient(circle at calc(var(--awning-w) / 2) 0, #000 calc(var(--awning-w) / 2 - 0.5px), transparent calc(var(--awning-w) / 2)) 0 0 / var(--awning-w) calc(var(--awning-w) / 2) repeat-x;
-          mask: radial-gradient(circle at calc(var(--awning-w) / 2) 0, #000 calc(var(--awning-w) / 2 - 0.5px), transparent calc(var(--awning-w) / 2)) 0 0 / var(--awning-w) calc(var(--awning-w) / 2) repeat-x;
-  filter: drop-shadow(0 3px 0 var(--ink));
-}
-
-.hero-inner {
-  position: relative;
-  z-index: 1;
-  max-width: 1180px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: 3rem 4.5rem;
-  align-items: center;
-}
-
-.hero-title {
-  font-size: clamp(2.7rem, 5.6vw, 4.5rem);
-  font-weight: 700;
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  margin: 0 0 1.5rem;
-  color: var(--ink);
-  text-shadow: 3px 3px 0 var(--blush);
-  text-wrap: balance;
-}
-
-.hero-description {
-  font-size: 1.15rem;
-  line-height: 1.65;
-  color: var(--ink-soft);
-  max-width: 34rem;
-  margin: 0 0 2.25rem;
-}
-
-.hero-actions {
+.auth-page {
+  min-height: 100vh;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.1rem;
-  margin-bottom: 2rem;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
 }
 
-.hero-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-
-.tag {
-  padding: 0.3rem 0.95rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--ink);
-  background: var(--butter);
-  border: 2px solid var(--ink);
-  border-radius: 999px;
+.auth-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1100px;
+  width: 100%;
+  gap: 2.5rem;
+  align-items: stretch;
 }
-.tag:nth-child(2) { background: var(--mint); }
-.tag:nth-child(3) { background: var(--sky); }
+
+.auth-logo {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
 
 /* --------------------------------------------------------------------------
-   Login Ticket (replaces sample result with actual login form)
+   Auth Card (form container)
    -------------------------------------------------------------------------- */
-.login-ticket {
-  justify-self: center;
-  width: 100%;
-  max-width: 26rem;
+.auth-card {
   background: var(--white);
   border: 2.5px solid var(--ink);
   border-radius: var(--r-lg);
-  box-shadow: 9px 9px 0 var(--grape);
-  transform: rotate(2deg);
-  animation: ticket-settle 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+  padding: 2.75rem;
+  box-shadow: var(--shadow-lg);
 }
 
-.login-ticket .ticket-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem 1rem;
-  border-bottom: 2.5px dashed var(--ink);
-}
-
-.login-ticket .ticket-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.45rem;
-  font-weight: 600;
-}
-
-.login-ticket .ticket-badge {
-  flex-shrink: 0;
-  padding: 0.15rem 0.7rem;
-  font-size: 0.8rem;
+.auth-title {
+  font-size: 2rem;
   font-weight: 700;
-  background: var(--sky);
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-}
-
-.login-form {
-  padding: 1.5rem 1.5rem 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.login-form .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.login-form .form-group label {
-  font-weight: 700;
-  font-size: 0.9rem;
+  line-height: 1.15;
+  text-align: center;
+  margin: 0 0 0.5rem;
   color: var(--ink);
 }
 
-.login-form .form-group input {
-  padding: 0.75rem 0.95rem;
-  font-size: 0.95rem;
-  font: inherit;
-  color: var(--ink);
-  background: var(--cream);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-sm);
-  transition: box-shadow 0.12s ease, background-color 0.12s ease;
+.auth-subtitle {
+  text-align: center;
+  color: var(--ink-soft);
+  margin: 0 0 2rem;
 }
 
-.login-form .form-group input::placeholder {
-  color: #8A7FA6;
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.login-form .form-group input:focus {
-  outline: 3px solid transparent;
-  background: var(--white);
-  box-shadow: 0 0 0 3px var(--lavender), 3px 3px 0 var(--grape);
-}
-
-.login-form .form-footer {
+.form-footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: -0.25rem;
+  margin-top: -0.5rem;
 }
 
-.login-form .forgot-link {
+.forgot-link {
   font-size: 0.85rem;
-  color: var(--grape);
-  font-weight: 700;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 2px;
-  text-decoration-color: var(--lavender);
-  transition: text-decoration-color 0.12s ease;
-}
-
-.login-form .forgot-link:hover {
-  text-decoration-color: var(--grape);
-}
-
-.login-form .btn-submit {
-  margin-top: 0.5rem;
-  padding: 0.85rem 1.5rem;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: var(--ink);
-  background: var(--bubblegum);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-sm);
-  box-shadow: var(--shadow-md);
-  cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
-}
-
-.login-form .btn-submit:hover:not(:disabled) {
-  background: var(--bubblegum-deep);
-  transform: translate(-1px, -1px);
-  box-shadow: 6px 6px 0 var(--ink);
-}
-
-.login-form .btn-submit:active:not(:disabled) {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0 var(--ink);
-}
-
-.login-form .btn-submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.login-ticket .form-error {
-  margin: 1rem 1.5rem 0;
-  padding: 0.75rem 1rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #7A140F;
-  background: #FFE3E0;
-  border: 2px solid var(--danger);
-  border-radius: var(--r-sm);
 }
 
 .auth-divider {
@@ -271,162 +110,212 @@
   text-decoration-color: var(--grape);
 }
 
-/* Keep the original ticket styles for reference/other pages if needed */
-.ticket {
-  justify-self: center;
-  width: 100%;
-  max-width: 24rem;
-  background: var(--white);
+/* --------------------------------------------------------------------------
+   Auth Info (information panel)
+   -------------------------------------------------------------------------- */
+.auth-info {
+  display: flex;
+  align-items: center;
+  padding: 2.75rem;
+  background: var(--lavender);
   border: 2.5px solid var(--ink);
   border-radius: var(--r-lg);
-  box-shadow: 9px 9px 0 var(--grape);
-  transform: rotate(2deg);
-  animation: ticket-settle 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+  box-shadow: var(--shadow-lg);
 }
 
-@keyframes ticket-settle {
-  from { transform: translateY(24px) rotate(7deg); opacity: 0; }
-  to   { transform: translateY(0) rotate(2deg);    opacity: 1; }
-}
-
-.ticket-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem 1rem;
-  border-bottom: 2.5px dashed var(--ink);
-}
-
-.ticket-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 600;
-}
-
-.ticket-badge {
-  flex-shrink: 0;
-  padding: 0.15rem 0.7rem;
-  font-size: 0.8rem;
+.info-content h3 {
+  font-size: 2rem;
   font-weight: 700;
-  background: var(--butter);
-  border: 2px solid var(--ink);
-  border-radius: 999px;
+  line-height: 1.15;
+  margin: 0 0 1rem;
+  text-wrap: balance;
 }
 
-.ticket-scores {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem 0.5rem;
+.highlight {
+  color: inherit;
 }
 
-.ticket-score {
+.info-content p {
+  color: var(--ink);
+  line-height: 1.6;
+  margin: 0 0 2rem;
+}
+
+.info-stats {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 0.75rem 0.5rem 0.65rem;
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-md);
-}
-.ticket-score.tiktok { background: var(--sky); }
-.ticket-score.reels  { background: var(--blush); }
-
-.ticket-num {
-  font-family: var(--font-display);
-  font-size: 3.25rem;
-  font-weight: 700;
-  line-height: 1;
-}
-.ticket-platform { font-weight: 700; font-size: 0.95rem; }
-
-.ticket-verdict {
-  margin: 0.75rem 1.5rem 0;
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  font-weight: 600;
+  gap: 1rem;
 }
 
-.ticket-fixes {
-  list-style: none;
-  margin: 0;
-  padding: 0.75rem 1.5rem 1.5rem;
-  display: grid;
-  gap: 0.6rem;
-}
-
-.ticket-fixes li {
-  position: relative;
-  padding-left: 1.9rem;
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
-
-.ticket-fixes li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  top: 0.05rem;
-  width: 1.3rem;
-  height: 1.3rem;
-  display: grid;
-  place-items: center;
-  font-size: 0.75rem;
-  font-weight: 800;
-  background: var(--mint);
-  border: 2px solid var(--ink);
-  border-radius: 50%;
-}
-
-/* --------------------------------------------------------------------------
-   Stats
-   -------------------------------------------------------------------------- */
-.hero-stats {
-  position: relative;
-  z-index: 1;
-  max-width: 1180px;
-  margin: 4rem auto 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.25rem;
-}
-
-.landing-page .stat-card {
+.info-stat {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  min-height: 7.5rem;
-  padding: 1.1rem 1.4rem;
-  background: var(--butter);
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--white);
   border: 2.5px solid var(--ink);
   border-radius: var(--r-md);
   box-shadow: var(--shadow-sm);
 }
-.landing-page .stat-card:nth-child(2) { background: var(--mint); }
-.landing-page .stat-card:nth-child(3) { background: var(--sky); }
-.landing-page .stat-card:nth-child(4) { background: var(--blush); }
 
-.landing-page .stat-number {
-  font-family: var(--font-display);
-  font-size: 2.75rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 0.4rem;
+.info-stat:nth-child(2) {
+  background: var(--butter);
 }
-.landing-page .stat-icon { font-size: 2.2rem; line-height: 1; margin-bottom: 0.4rem; }
-.landing-page .stat-label {
+
+.info-icon {
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-number {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.info-label {
   font-size: 0.95rem;
-  font-weight: 500;
-  line-height: 1.35;
   color: var(--ink);
-  text-transform: none;
-  letter-spacing: 0;
-  margin: 0;
 }
 
 /* --------------------------------------------------------------------------
-   How it works (a real sequence, so numbered)
+   Preserve existing styles for features-section and partner-band
+   -------------------------------------------------------------------------- */
+
+/* Hero section styles are now replaced by auth-container, but keeping
+   any shared variables or mixins that might be used elsewhere */
+
+/* --------------------------------------------------------------------------
+   Forms (shared with index.css)
+   -------------------------------------------------------------------------- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.form-group input,
+.otp-input {
+  padding: 0.75rem 0.95rem;
+  font-size: 0.95rem;
+  font: inherit;
+  color: var(--ink);
+  background: var(--cream);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  transition: box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.form-group input::placeholder {
+  color: #8A7FA6;
+}
+
+.form-group input:focus,
+.otp-input:focus {
+  outline: 3px solid transparent;
+  background: var(--white);
+  box-shadow: 0 0 0 3px var(--lavender), 3px 3px 0 var(--grape);
+}
+
+.form-error {
+  margin: 1rem 1.5rem 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #7A140F;
+  background: #FFE3E0;
+  border: 2px solid var(--danger);
+  border-radius: var(--r-sm);
+}
+
+/* --------------------------------------------------------------------------
+   Buttons (shared with index.css)
+   -------------------------------------------------------------------------- */
+.btn-submit {
+  margin-top: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--ink);
+  background: var(--bubblegum);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: var(--bubblegum-deep);
+  transform: translate(-1px, -1px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 1040px) {
+  .features-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 2.5rem;
+  }
+  .hero-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 968px) {
+  .auth-container {
+    grid-template-columns: 1fr;
+  }
+  .auth-info {
+    order: -1;
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 860px) {
+  /* No specific changes needed for auth layout at this breakpoint */
+}
+
+@media (max-width: 640px) {
+  .auth-page,
+  .auth-info {
+    padding: 1rem;
+  }
+  .auth-card {
+    padding: 1.75rem 1.25rem;
+  }
+  .info-content h3 {
+    font-size: 1.6rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Preserve existing styles for features-section and partner-band from original
    -------------------------------------------------------------------------- */
 .features-section {
   padding: 5rem 2rem 5.5rem;
@@ -437,9 +326,12 @@
   border-bottom: 3px solid var(--ink);
 }
 
-.features-content { max-width: 1180px; margin: 0 auto; }
+.features-content {
+  max-width: 1180px;
+  margin: 0 auto;
+}
 
-.landing-page .section-title {
+.section-title {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   line-height: 1.1;
@@ -500,28 +392,28 @@
   border-radius: var(--r-sm);
 }
 
-.landing-page .feature-card h3 {
+.feature-card h3 {
   font-size: 1.35rem;
   line-height: 1.2;
   margin: 0 0 0.6rem;
 }
 
-.landing-page .feature-card p {
+.feature-card p {
   margin: 0;
   color: var(--ink);
   line-height: 1.55;
 }
 
-/* --------------------------------------------------------------------------
-   Partner credit
-   -------------------------------------------------------------------------- */
 .partner-band {
   padding: 1.6rem 2rem;
   text-align: center;
   background: var(--bubblegum);
   border-bottom: 3px solid var(--ink);
 }
-.partner-band p { margin: 0; font-weight: 600; }
+.partner-band p {
+  margin: 0;
+  font-weight: 600;
+}
 .partner-name {
   font-family: var(--font-display);
   font-size: 1.35rem;
@@ -530,25 +422,31 @@
 }
 
 /* --------------------------------------------------------------------------
-   Responsive
+   Responsive for features-section and partner-band (preserved from original)
    -------------------------------------------------------------------------- */
 @media (max-width: 1040px) {
-  .features-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 2.5rem; }
-  .hero-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .features-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 2.5rem;
+  }
+  .hero-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 860px) {
-  .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
-  .hero-copy { text-align: left; }
-  .ticket { max-width: 26rem; }
+  .features-section {
+    padding: 4rem 1.25rem 4.5rem;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-@media (max-width: 560px) {
-  .hero-section { --awning-w: 40px; padding: calc(var(--awning-w) + 2rem) 1.25rem 3rem; }
-  .hero-stats { margin-top: 3rem; gap: 0.9rem; }
-  .landing-page .stat-card { min-height: 6.5rem; padding: 0.9rem 1rem; }
-  .landing-page .stat-number { font-size: 2.2rem; }
-  .features-section { padding: 4rem 1.25rem 4.5rem; }
-  .features-grid { grid-template-columns: 1fr; }
-  .hero-actions .btn-cta, .hero-actions .btn-secondary { flex: 1 1 100%; }
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

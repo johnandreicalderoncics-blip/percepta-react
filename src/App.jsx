@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Verify from './pages/Verify';
 import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
+import Trends from './pages/Trends';
 import './App.css';
 
 function App() {
@@ -20,13 +21,21 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/verify" element={<Verify />} />
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route 
-              path="/dashboard" 
+            <Route
+              path="/dashboard"
               element={
                 <ProtectedRoute>
                   <Dashboard />
                 </ProtectedRoute>
-              } 
+              }
+            />
+            <Route
+              path="/trends"
+              element={
+                <ProtectedRoute>
+                  <Trends />
+                </ProtectedRoute>
+              }
             />
           </Routes>
         </MainLayout>

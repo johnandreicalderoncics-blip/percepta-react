@@ -1,9 +1,6 @@
-/* ==========================================================================
-   Percepta design tokens + shared primitives
-   Palette is drawn from the blingify / Popcraft feed: pastel color blocks,
-   chunky ink outlines, polka dots, and a grape-purple accent.
-   Page files (Landing.css, Auth.css, ...) only hold page-specific layout.
-   ========================================================================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   /* Color */
