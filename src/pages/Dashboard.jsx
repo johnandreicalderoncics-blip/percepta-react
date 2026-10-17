@@ -60,10 +60,10 @@ const Dashboard = () => {
             <span className="nav-icon">📤</span>
             <span>Upload</span>
           </button>
-          <button className="nav-item">
+          <Link to="/trends" className="nav-item">
             <span className="nav-icon">📈</span>
             <span>Trends</span>
-          </button>
+          </Link>
           <button className="nav-item">
             <span className="nav-icon">🕐</span>
             <span>History</span>

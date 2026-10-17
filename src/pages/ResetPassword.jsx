@@ -79,7 +79,7 @@ const ResetPassword = () => {
               </form>
               
               <p className="back-link">
-                Remembered your password? <Link to="/login" className="link">Back to login</Link>
+                Remembered your password? <Link to="/" className="link">Back to login</Link>
               </p>
             </>
           ) : (
@@ -90,7 +90,7 @@ const ResetPassword = () => {
                 We've sent a password reset link to <strong>{email}</strong>
               </p>
               
-              <Link to="/login" className="btn-reset">Back to Login</Link>
+              <Link to="/" className="btn-reset">Back to Login</Link>
               
               <p className="resend-text">
                 Didn't receive the email? <button className="resend-btn">Resend</button>

@@ -1,82 +1,163 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import './Landing.css';
 
 const Landing = () => {
+  const navigate = useNavigate();
+  const { signIn } = useAuth();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const { error } = await signIn(formData.email, formData.password);
+
+      if (error) {
+        setError(error.message);
+      } else {
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
   return (
     <div className="landing-page">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-tags">
-            <span className="tag">🎯 AI-optimized</span>
-            <span className="tag">📊 pre-publish</span>
-            <span className="tag">🎬 platform scoring</span>
+      <div className="auth-page">
+        <div className="auth-container">
+          <div className="auth-logo">
+            <span className="logo-text">PERCE<span className="logo-accent">PTA</span></span>
           </div>
-          
-          <h1 className="hero-title">
-            Know where to post it<br />
-            <span className="hero-highlight">before</span> you go live.
-          </h1>
-          
-          <p className="hero-description">
-            Upload your short-form video draft. Percepta evaluates its audio, captions, hashtags, and text overlays against today's top 30 trends on both TikTok and Instagram Reels — then tells you exactly where to post it and what to change.
-          </p>
-          
-          <div className="hero-actions">
-            <Link to="/register" className="btn-cta">Analyze my video</Link>
-            <Link to="/login" className="btn-secondary">Log In</Link>
+
+          <div className="auth-card">
+            <h2 className="auth-title">Welcome back</h2>
+            <p className="auth-subtitle">Access your analytics dashboard</p>
+
+            {error && (
+              <div className="form-error">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="auth-form">
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="name@company.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-footer">
+                <Link to="/reset-password" className="forgot-link">Forgot Password?</Link>
+              </div>
+
+              <button type="submit" className="btn-submit" disabled={loading}>
+                {loading ? 'Logging in...' : 'Log In'}
+              </button>
+            </form>
+
+            <div className="auth-divider">
+              <span>or</span>
+            </div>
           </div>
-          
-          <div className="hero-stats">
-            <div className="stat-card">
-              <div className="stat-number">30</div>
-              <div className="stat-label">Daily trends analyzed</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">&lt;30s</div>
-              <div className="stat-label">Average analysis time</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-icon">🎵</div>
-              <div className="stat-label">Metadata integration support</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-icon">📊</div>
-              <div className="stat-label">Platform coverage (TikTok/IG)</div>
+
+          <div className="auth-info">
+            <div className="info-content">
+              <h3>Know where to post it <span className="highlight">before</span> you go live.</h3>
+              <p>Upload your short-form video draft. Percepta evaluates its audio, captions, hashtags, and text overlays against the top 10 emerging trends in each category (Audio/Sound Identifier, Hashtags, and Caption Keywords) on both TikTok and Instagram Reels, then tells you exactly where to post it and what to change.</p>
+
+              <div className="info-stats">
+                <div className="info-stat">
+                  <div className="info-icon">🎵</div>
+                  <div className="info-text">
+                    <div className="info-number">10</div>
+                    <div className="info-label">Top trends per category</div>
+                  </div>
+                </div>
+                <div className="info-stat">
+                  <div className="info-icon">📊</div>
+                  <div className="info-text">
+                    <div className="info-number">2</div>
+                    <div className="info-label">Platforms (TikTok/IG)</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
-      
+      </div>
+
       <section className="features-section">
         <div className="features-content">
-          <h2 className="section-title">How Percepta Works</h2>
-          
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon">📤</div>
-              <h3>Upload Your Video</h3>
-              <p>Upload your short-form video draft (≤60 seconds, vertical format)</p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">🤖</div>
-              <h3>AI Analysis</h3>
-              <p>Our AI extracts speech, text overlays, and metadata, then compares against daily trends</p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">📊</div>
-              <h3>Get Platform Scores</h3>
-              <p>Receive platform fit scores for TikTok and Instagram Reels</p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">✨</div>
-              <h3>Actionable Feedback</h3>
-              <p>View detailed recommendations to optimize your content before posting</p>
-            </div>
-          </div>
+          <h2 className="section-title">How Percepta works</h2>
+
+          <ol className="features-grid">
+            <li className="feature-card">
+              <div className="feature-icon" aria-hidden="true">📤</div>
+              <h3>Upload your video</h3>
+              <p>Upload your short-form video draft (60 seconds or less, vertical format).</p>
+            </li>
+            <li className="feature-card">
+              <div className="feature-icon" aria-hidden="true">🤖</div>
+              <h3>AI analysis</h3>
+              <p>Our AI extracts speech, text overlays, and metadata, then compares them against daily trends.</p>
+            </li>
+            <li className="feature-card">
+              <div className="feature-icon" aria-hidden="true">📊</div>
+              <h3>Get platform scores</h3>
+              <p>Receive platform fit scores for TikTok and Instagram Reels.</p>
+            </li>
+            <li className="feature-card">
+              <div className="feature-icon" aria-hidden="true">✨</div>
+              <h3>Act on the feedback</h3>
+              <p>See specific recommendations to fix before you post.</p>
+            </li>
+          </ol>
         </div>
+      </section>
+
+      <section className="partner-band">
+        <p>
+          Percepta is made in partnership with <span className="partner-name">blingify</span>.
+        </p>
       </section>
     </div>
   );

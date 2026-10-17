@@ -1,7 +1,7 @@
 # Percepta - React Application
 
 ## Project Overview
-Percepta is a platform that helps content creators evaluate their short-form videos against TikTok and Instagram Reels trends before posting.
+Percepta is a business-focused platform that helps content creators evaluate their short-form videos against TikTok and Instagram Reels trends before posting. The landing page serves as the primary login portal for business users.
 
 ## Color Palette
 - **Primary Dark**: `#1e1b4b` (Deep navy blue)
@@ -15,39 +15,38 @@ Percepta is a platform that helps content creators evaluate their short-form vid
 ## Routes
 
 ### Public Routes
-1. **Landing Page** - `/`
-   - Hero section with tagline
-   - Features overview
+1. **Landing/Login Page** - `/`
+   - Combined login form with product showcase
+   - Business-focused login experience
+   - Features overview below login
    - Platform statistics
-   - CTA buttons to register or login
+   - "Sign up" redirect
 
-2. **Login** - `/login`
-   - Email and password authentication
-   - "Forgot Password" link
-   - Sign up redirect
-
-3. **Register** - `/register`
+2. **Register** - `/register`
    - Full name, email, and password fields
    - Password confirmation
-   - Sign in redirect
+   - Sign in redirect to landing page
 
-4. **Verify Email** - `/verify`
-   - 4-digit OTP input
+3. **Verify Email** - `/verify`
+   - 6-digit OTP input
    - Resend code option
    - Redirects to dashboard after verification
 
-5. **Reset Password** - `/reset-password`
+4. **Reset Password** - `/reset-password`
    - Email input for password reset
    - Confirmation screen after submission
-   - Back to login option
+   - Back to landing page option
 
 ### Protected Routes (Requires Authentication)
-6. **Dashboard** - `/dashboard`
+5. **Dashboard** - `/dashboard`
    - User welcome message
    - Video upload functionality
    - Platform fit scores (TikTok & Instagram)
    - Recent analysis history
    - Statistics overview
+
+### Redirects
+- `/login` → redirects to `/` (landing page now includes login)
 
 ## Project Structure
 ```

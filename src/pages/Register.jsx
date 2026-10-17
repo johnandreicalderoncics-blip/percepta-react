@@ -146,7 +146,7 @@ const Register = () => {
           </div>
           
           <p className="auth-switch">
-            Already have an account? <Link to="/login" className="auth-link">Sign in</Link>
+            Already have an account? <Link to="/" className="auth-link">Sign in</Link>
           </p>
         </div>
         
