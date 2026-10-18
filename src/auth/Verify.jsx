@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import './Verify.css';
+import { useAuth } from '../../shared/contexts/AuthContext';
+import '../pages/Verify.css';
 
 const Verify = () => {
   const navigate = useNavigate();
