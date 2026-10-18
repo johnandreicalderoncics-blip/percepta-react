@@ -1,13 +1,18 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import MainLayout from './layouts/MainLayout';
-import ProtectedRoute from './components/ProtectedRoute';
-import Landing from './pages/Landing';
-import Register from './pages/Register';
-import Verify from './pages/Verify';
-import ResetPassword from './pages/ResetPassword';
-import Dashboard from './pages/Dashboard';
-import Trends from './pages/Trends';
+import { AuthProvider } from './shared/contexts/AuthContext';
+import MainLayout from './shared/layouts/MainLayout';
+import ProtectedRoute from './shared/components/ProtectedRoute';
+import AdminProtectedRoute from './shared/components/AdminProtectedRoute';
+import Landing from './public/Landing';
+import Register from './auth/Register';
+import Verify from './auth/Verify';
+import ResetPassword from './auth/ResetPassword';
+import Dashboard from './user/Dashboard';
+import Trends from './user/Trends';
+import UploadPage from './user/UploadPage';
+import HistoryPage from './user/HistoryPage';
+import SettingsPage from './user/SettingsPage';
+import AdminOverview from './admin/AdminOverview';
 import './App.css';
 
 function App() {
@@ -35,6 +40,38 @@ function App() {
                 <ProtectedRoute>
                   <Trends />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/upload"
+              element={
+                <ProtectedRoute>
+                  <UploadPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/history"
+              element={
+                <ProtectedRoute>
+                  <HistoryPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <SettingsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin-overview"
+              element={
+                <AdminProtectedRoute>
+                  <AdminOverview />
+                </AdminProtectedRoute>
               }
             />
           </Routes>
