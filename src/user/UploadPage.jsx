@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import './UploadPage.css';
+import { useAuth } from '../../shared/contexts/AuthContext';
+import '../pages/UploadPage.css';
 
 const UploadPage = () => {
   const navigate = useNavigate();
