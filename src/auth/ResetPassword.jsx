@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import './ResetPassword.css';
+import { useAuth } from '../../shared/contexts/AuthContext';
+import '../pages/ResetPassword.css';
 
 const ResetPassword = () => {
   const { resetPassword } = useAuth();
