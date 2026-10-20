@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../shared/contexts/AuthContext';
-import '../pages/Auth.css';
+import { useAuth } from '../shared/contexts/AuthContext';
+import './Auth.css';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match!');
       return;
@@ -29,17 +29,33 @@ const Register = () => {
       return;
     }
 
+    // Additional password policy checks
+    if (!/.*[A-Z].*/.test(formData.password)) {
+      setError('Password must contain at least one uppercase letter');
+      return;
+    }
+
+    if (!/.*[a-z].*/.test(formData.password)) {
+      setError('Password must contain at least one lowercase letter');
+      return;
+    }
+
+    if (!/.*\d.*/.test(formData.password)) {
+      setError('Password must contain at least one number');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const { error } = await signUp(
+      const { error: authError } = await signUp(
         formData.email,
         formData.password,
         formData.fullName
       );
-      
-      if (error) {
-        setError(error.message);
+
+      if (authError) {
+        setError(authError);
       } else {
         // Successfully registered, navigate to verify page
         navigate('/verify', { state: { email: formData.email } });
@@ -64,11 +80,11 @@ const Register = () => {
         <div className="auth-logo">
           <span className="logo-text">PERCE<span className="logo-accent">PTA</span></span>
         </div>
-        
+
         <div className="auth-card">
           <h2 className="auth-title">Create your Account</h2>
           <p className="auth-subtitle">Start analyzing your content today</p>
-          
+
           {error && (
             <div style={{
               padding: '0.75rem',
@@ -81,7 +97,7 @@ const Register = () => {
               {error}
             </div>
           )}
-          
+
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="form-group">
               <label htmlFor="fullName">Full Name</label>
@@ -95,7 +111,7 @@ const Register = () => {
                 required
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
@@ -108,7 +124,7 @@ const Register = () => {
                 required
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <input
@@ -122,7 +138,7 @@ const Register = () => {
                 minLength="8"
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="confirmPassword">Confirm Password</label>
               <input
@@ -135,26 +151,26 @@ const Register = () => {
                 required
               />
             </div>
-            
+
             <button type="submit" className="btn-submit" disabled={loading}>
               {loading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
-          
+
           <div className="auth-divider">
             <span>or</span>
           </div>
-          
+
           <p className="auth-switch">
             Already have an account? <Link to="/" className="auth-link">Sign in</Link>
           </p>
         </div>
-        
+
         <div className="auth-info">
           <div className="info-content">
             <h3>Know where to post it <span className="highlight">before</span> you go live.</h3>
             <p>Upload your short-form video draft. Percepta evaluates its audio, captions, hashtags, and text overlays against today's top 30 trends.</p>
-            
+
             <div className="info-stats">
               <div className="info-stat">
                 <div className="info-icon">🎵</div>

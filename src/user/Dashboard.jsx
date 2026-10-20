@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../shared/contexts/AuthContext';
-import '../pages/Dashboard.css';
+import { useAuth } from '../shared/contexts/AuthContext';
+import './Dashboard.css';
 
 const Dashboard = () => {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../shared/contexts/AuthContext';
-import '../pages/ResetPassword.css';
+import { useAuth } from '../shared/contexts/AuthContext';
+import './ResetPassword.css';
 
 const ResetPassword = () => {
   const { resetPassword } = useAuth();
@@ -16,10 +16,10 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      const { error } = await resetPassword(email);
-      
-      if (error) {
-        setError(error.message);
+      const { error: authError } = await resetPassword(email);
+
+      if (authError) {
+        setError(authError);
       } else {
         setSubmitted(true);
       }
@@ -36,7 +36,7 @@ const ResetPassword = () => {
         <div className="reset-logo">
           <span className="logo-text">PERCE<span className="logo-accent">PTA</span></span>
         </div>
-        
+
         <div className="reset-card">
           {!submitted ? (
             <>
@@ -44,7 +44,7 @@ const ResetPassword = () => {
               <p className="reset-subtitle">
                 Enter your registered email to reset your password
               </p>
-              
+
               {error && (
                 <div style={{
                   padding: '0.75rem',
@@ -58,7 +58,7 @@ const ResetPassword = () => {
                   {error}
                 </div>
               )}
-              
+
               <form onSubmit={handleSubmit} className="reset-form">
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
@@ -72,12 +72,12 @@ const ResetPassword = () => {
                     required
                   />
                 </div>
-                
+
                 <button type="submit" className="btn-reset" disabled={loading}>
                   {loading ? 'Sending...' : 'Send reset code'}
                 </button>
               </form>
-              
+
               <p className="back-link">
                 Remembered your password? <Link to="/" className="link">Back to login</Link>
               </p>
@@ -89,9 +89,9 @@ const ResetPassword = () => {
               <p className="reset-subtitle">
                 We've sent a password reset link to <strong>{email}</strong>
               </p>
-              
+
               <Link to="/" className="btn-reset">Back to Login</Link>
-              
+
               <p className="resend-text">
                 Didn't receive the email? <button className="resend-btn">Resend</button>
               </p>

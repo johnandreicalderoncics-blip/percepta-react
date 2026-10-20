@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../shared/contexts/AuthContext';
-import '../pages/Auth.css';
+import { useAuth } from '../shared/contexts/AuthContext';
+import './Auth.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,10 +19,10 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const { error } = await signIn(formData.email, formData.password);
-      
-      if (error) {
-        setError(error.message);
+      const { error: authError } = await signIn(formData.email, formData.password);
+
+      if (authError) {
+        setError(authError);
       } else {
         // Successfully logged in, redirect to dashboard
         navigate('/dashboard');
@@ -47,11 +47,11 @@ const Login = () => {
         <div className="auth-logo">
           <span className="logo-text">PERCE<span className="logo-accent">PTA</span></span>
         </div>
-        
+
         <div className="auth-card">
           <h2 className="auth-title">Welcome back</h2>
           <p className="auth-subtitle">Log in to analyze your content</p>
-          
+
           {error && (
             <div style={{
               padding: '0.75rem',
@@ -64,7 +64,7 @@ const Login = () => {
               {error}
             </div>
           )}
-          
+
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="form-group">
               <label htmlFor="email">Email</label>
@@ -78,7 +78,7 @@ const Login = () => {
                 required
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <input
@@ -91,30 +91,30 @@ const Login = () => {
                 required
               />
             </div>
-            
+
             <div className="form-footer">
               <Link to="/reset-password" className="forgot-link">Forgot Password?</Link>
             </div>
-            
+
             <button type="submit" className="btn-submit" disabled={loading}>
               {loading ? 'Logging in...' : 'Log In'}
             </button>
           </form>
-          
+
           <div className="auth-divider">
             <span>or</span>
           </div>
-          
+
           <p className="auth-switch">
             Don't have an account? <Link to="/register" className="auth-link">Sign up</Link>
           </p>
         </div>
-        
+
         <div className="auth-info">
           <div className="info-content">
             <h3>Know where to post it <span className="highlight">before</span> you go live.</h3>
             <p>Upload your short-form video draft. Percepta evaluates its audio, captions, hashtags, and text overlays against today's top 30 trends.</p>
-            
+
             <div className="info-stats">
               <div className="info-stat">
                 <div className="info-icon">🎵</div>

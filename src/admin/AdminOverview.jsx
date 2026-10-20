@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../shared/contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import './AdminOverview.css';
 
 const AdminOverview = () => {
   const { user } = useAuth();

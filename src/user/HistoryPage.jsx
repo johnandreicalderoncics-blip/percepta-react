@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import './HistoryPage.css';
+import { useAuth } from '../shared/contexts/AuthContext';
 
 const HistoryPage = () => {
   const navigate = useNavigate();

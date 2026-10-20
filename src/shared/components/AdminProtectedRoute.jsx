@@ -24,10 +24,8 @@ const AdminProtectedRoute = ({ children }) => {
     return <Navigate to="/" replace />;
   }
 
-  // Check if user has admin role (check both app_metadata and user_metadata for development flexibility)
-  const isAdmin = user?.app_metadata?.role === 'admin' ||
-                 (user?.user_metadata?.role === 'admin' &&
-                  process.env.NODE_ENV === 'development');
+  // Check if user has admin role (now stored in user_account table)
+  const isAdmin = user?.role === 'admin';
 
   if (!isAdmin) {
     return <Navigate to="/dashboard" replace />;
