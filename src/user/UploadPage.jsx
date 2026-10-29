@@ -242,7 +242,7 @@ const UploadPage = () => {
             className="file-input"
             onChange={handleFileUpload}
           />
-          <p className="upload-hint">Supported formats: MP4, MOV, AVI, WEBM (Max 100MB)</p>
+          <p className="upload-hint">Supported formats: MP4, MOV (Max 100MB)</p>
         </label>
       )}
     </>
