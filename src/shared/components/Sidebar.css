@@ -15,16 +15,19 @@
   display: flex;
   flex-direction: column;
   padding: 2rem 1.1rem;
-  background: var(--lavender);
-  border-right: 3px solid var(--ink);
+  background: var(--navy-deep);
+  border-right: 1px solid rgba(253, 252, 246, 0.14);
+  color: var(--paper);
 }
 
 .sidebar-logo {
   text-align: center;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 2.5px dashed var(--ink);
+  border-bottom: 1px dashed rgba(253, 252, 246, 0.18);
 }
+
+.sidebar-logo .logo-text { color: var(--paper); letter-spacing: 0.04em; }
 
 .sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
 
@@ -33,23 +36,24 @@
   align-items: center;
   padding: 0.75rem 1rem;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
   text-align: left;
-  color: var(--ink);
+  color: rgba(253, 252, 246, 0.82);
   background: transparent;
-  border: 2.5px solid transparent;
-  border-radius: var(--r-sm);
-  transition: background-color 0.12s ease, border-color 0.12s ease;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 }
-.nav-item:hover { background: rgba(255, 255, 255, 0.55); border-color: var(--ink); }
+.nav-item:hover { background: rgba(253, 252, 246, 0.07); color: var(--paper); }
 .nav-item.active {
-  background: var(--butter);
-  border-color: var(--ink);
-  box-shadow: var(--shadow-sm);
-  font-weight: 700;
+  background: var(--amber);
+  border-color: var(--line);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+  color: var(--line);
+  font-weight: 600;
 }
 
-.sidebar-footer { padding-top: 1.5rem; border-top: 2.5px dashed var(--ink); }
+.sidebar-footer { padding-top: 1.5rem; border-top: 1px dashed rgba(253, 252, 246, 0.18); }
 
 .user-profile {
   display: flex;
@@ -57,9 +61,9 @@
   gap: 0.75rem;
   padding: 0.65rem;
   margin-bottom: 0.75rem;
-  background: var(--white);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-sm);
+  background: rgba(253, 252, 246, 0.06);
+  border: 1px solid rgba(253, 252, 246, 0.18);
+  border-radius: 10px;
 }
 
 .user-avatar {
@@ -71,15 +75,22 @@
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.95rem;
-  color: var(--ink);
-  background: var(--bubblegum);
-  border: 2.5px solid var(--ink);
+  color: var(--paper);
+  background: var(--navy);
+  border: 2px solid var(--amber);
   border-radius: 50%;
 }
 
 .user-info { flex: 1; min-width: 0; }
 .user-name { font-weight: 700; font-size: 0.95rem; }
-.user-email { font-size: 0.8rem; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-email {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: rgba(253, 252, 246, 0.55);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 968px) {
@@ -95,7 +106,7 @@
     gap: 0.75rem 1rem;
     padding: 0.75rem 1rem;
     border-right: none;
-    border-bottom: 3px solid var(--ink);
+    border-bottom: 1px solid rgba(253, 252, 246, 0.14);
   }
   .sidebar-logo { margin: 0; padding: 0; border: none; }
   .sidebar-nav { order: 3; flex: 1 1 100%; flex-direction: row; overflow-x: auto; padding-bottom: 0.25rem; }

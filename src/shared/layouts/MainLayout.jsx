@@ -1,9 +1,12 @@
+import { Outlet } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
 import './MainLayout.css';
 
-const MainLayout = ({ children }) => (
-  <div className="main-layout">
-    <main className="main-content">
-      {children}
+const MainLayout = () => (
+  <div className="app-shell app-bg">
+    <Sidebar />
+    <main className="app-main">
+      <Outlet />
     </main>
   </div>
 );

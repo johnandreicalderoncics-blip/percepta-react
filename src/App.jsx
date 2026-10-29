@@ -18,63 +18,40 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <MainLayout>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Navigate to="/" replace />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/verify" element={<Verify />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/trends"
-              element={
-                <ProtectedRoute>
-                  <Trends />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/upload"
-              element={
-                <ProtectedRoute>
-                  <UploadPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/history"
-              element={
-                <ProtectedRoute>
-                  <HistoryPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/settings"
-              element={
-                <ProtectedRoute>
-                  <SettingsPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin-overview"
-              element={
-                <AdminProtectedRoute>
-                  <AdminOverview />
-                </AdminProtectedRoute>
-              }
-            />
-          </Routes>
-        </MainLayout>
+        <Routes>
+          {/* Public: full-viewport pages, no shell wrapper */}
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify" element={<Verify />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+
+          {/* Authenticated: shell (sidebar + navy background) provided by MainLayout */}
+          <Route
+            element={
+              <ProtectedRoute>
+                <MainLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/trends" element={<Trends />} />
+            <Route path="/upload" element={<UploadPage />} />
+            <Route path="/history" element={<HistoryPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+          </Route>
+
+          {/* Admin */}
+          <Route
+            element={
+              <AdminProtectedRoute>
+                <MainLayout />
+              </AdminProtectedRoute>
+            }
+          >
+            <Route path="/admin-overview" element={<AdminOverview />} />
+          </Route>
+        </Routes>
       </AuthProvider>
     </Router>
   );

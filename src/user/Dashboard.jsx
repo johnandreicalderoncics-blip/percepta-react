@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../shared/contexts/AuthContext';
-import Sidebar from '../shared/components/Sidebar';
 import './Dashboard.css';
 
 const getGreeting = () => {
@@ -31,19 +30,16 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="app-shell">
-      <Sidebar />
+    <>
+      <header className="page-header">
+        <div>
+          <h1 className="page-title">{getGreeting()}, {userName}</h1>
+          <p className="page-subtitle">Here's what's happening with your content today</p>
+        </div>
+        <Link to="/upload" className="btn-upload btn-arrow">Analyze a video</Link>
+      </header>
 
-      <main className="app-main">
-        <header className="page-header">
-          <div>
-            <h1 className="page-title">{getGreeting()}, {userName}</h1>
-            <p className="page-subtitle">Here's what's happening with your content today</p>
-          </div>
-          <Link to="/upload" className="btn-upload">Upload a video</Link>
-        </header>
-
-        <div className="stats-grid">
+      <div className="stats-grid">
           <div className="stat-box">
             <div className="stat-label">Videos Analyzed</div>
             <div className="stat-value">12</div>
@@ -112,7 +108,7 @@ const Dashboard = () => {
                 <div key={item.id} className="recent-item">
                   <div className="recent-info">
                     <h4 className="recent-title">{item.title}</h4>
-                    <p className="recent-date">{item.date}</p>
+                    <p className="recent-date mono">{item.date}</p>
                   </div>
                   <div className="recent-scores">
                     <span className="mini-score tiktok">{item.tiktok}</span>
@@ -124,8 +120,7 @@ const Dashboard = () => {
             <Link to="/history" className="btn-view-all">View all analyses</Link>
           </section>
         </div>
-      </main>
-    </div>
+    </>
   );
 };
 

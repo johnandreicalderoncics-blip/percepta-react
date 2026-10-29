@@ -1,3 +1,4 @@
-.main-layout { min-height: 100vh; }
+/* MainLayout now provides the authenticated shell (.app-shell .app-bg).
+   Shell grid, sidebar and app-main styles live in Sidebar.css. */
 
-.main-content { min-height: 100vh; position: relative; z-index: 1; }
+.main-layout { min-height: 100vh; }

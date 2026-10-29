@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../shared/contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import Sidebar from '../shared/components/Sidebar';
 import '../user/pages.css';
 import './AdminOverview.css';
 
@@ -181,32 +180,29 @@ const AdminOverview = () => {
   );
 
   return (
-    <div className="app-shell">
-      <Sidebar />
-
-      <main className="app-main">
-        {loading ? (
-          <div className="admin-loading">
-            <div className="loading-spinner"></div>
-            <p>Loading admin overview...</p>
+    <>
+      {loading ? (
+        <div className="admin-loading">
+          <div className="loading-spinner"></div>
+          <p>Loading admin overview...</p>
+        </div>
+      ) : error ? (
+        <>
+          {renderHeader()}
+          <div className="status-banner">
+            <span>{error}</span>
+            <button onClick={() => {
+              setError(null);
+              fetchUsers();
+              fetchSystemStats();
+            }} className="btn-secondary">
+              Try Again
+            </button>
           </div>
-        ) : error ? (
-          <>
-            {renderHeader()}
-            <div className="status-banner">
-              <span>{error}</span>
-              <button onClick={() => {
-                setError(null);
-                fetchUsers();
-                fetchSystemStats();
-              }} className="btn-secondary">
-                Try Again
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            {renderHeader()}
+        </>
+      ) : (
+        <>
+          {renderHeader()}
 
             {notice && (
               <div className="status-banner success">
@@ -279,7 +275,7 @@ const AdminOverview = () => {
                                 {user.status.replace('_', ' ')}
                               </span>
                             </td>
-                            <td>{new Date(user.created_at).toLocaleDateString()}</td>
+                            <td className="mono">{new Date(user.created_at).toLocaleDateString()}</td>
                             <td className="user-actions-cell">
                               <button
                                 onClick={() => {
@@ -458,8 +454,7 @@ const AdminOverview = () => {
             </div>
           </div>
         )}
-      </main>
-    </div>
+    </>
   );
 };
 

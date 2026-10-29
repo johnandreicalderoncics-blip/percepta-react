@@ -5,7 +5,7 @@
   padding: 2rem;
   text-align: center;
   font-size: 1.1rem;
-  color: var(--ink-soft);
+  color: rgba(253, 252, 246, 0.85);
 }
 
 .trends-container {
@@ -16,10 +16,10 @@
 
 .trends-section {
   flex: 1;
-  background: var(--white);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.28);
   display: flex;
   flex-direction: column;
 }
@@ -54,12 +54,12 @@
   display: flex;
   align-items: center;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--ink-soft);
+  border-bottom: 1px solid rgba(18, 20, 44, 0.12);
   transition: background-color 0.12s ease;
 }
 
 .trend-item:hover {
-  background: var(--butter);
+  background: rgba(244, 167, 43, 0.08);
 }
 
 .trend-item:last-child {
@@ -68,9 +68,11 @@
 
 .trend-rank {
   width: 30px;
-  font-weight: 700;
-  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--amber-deep);
   flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .trend-content {
@@ -87,8 +89,9 @@
 }
 
 .trend-meta {
-  font-size: 0.875rem;
-  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #585c78;
   font-weight: 500;
 }
 

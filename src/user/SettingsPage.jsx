@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useAuth } from '../shared/contexts/AuthContext';
-import Sidebar from '../shared/components/Sidebar';
 import './pages.css';
 
 const DEFAULT_SETTINGS = {
@@ -52,16 +51,13 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="app-shell">
-      <Sidebar />
-
-      <main className="app-main">
-        <header className="page-header">
-          <div>
-            <h1 className="page-title">Settings</h1>
-            <p className="page-subtitle">Customize your Percepta experience</p>
-          </div>
-        </header>
+    <>
+      <header className="page-header">
+        <div>
+          <h1 className="page-title">Settings</h1>
+          <p className="page-subtitle">Customize your Percepta experience</p>
+        </div>
+      </header>
 
         {status && (
           <div className="status-banner success" role="status">
@@ -80,7 +76,7 @@ const SettingsPage = () => {
               </div>
               <div className="setting-item">
                 <h3>Email</h3>
-                <p className="setting-value">{user?.email}</p>
+                <p className="setting-value mono">{user?.email}</p>
               </div>
               <div className="setting-item">
                 <h3>Status</h3>
@@ -206,8 +202,7 @@ const SettingsPage = () => {
             </div>
           </div>
         )}
-      </main>
-    </div>
+    </>
   );
 };
 

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../shared/contexts/AuthContext';
-import Sidebar from '../shared/components/Sidebar';
 import './Trends.css';
 
 const TrendSection = ({ title, description, trends }) => (
@@ -103,62 +102,52 @@ const Trends = () => {
   }, [authLoading]);
 
   if (authLoading) {
-    return (
-      <div className="app-shell">
-        <div className="app-main">
-          <div className="page-loading">Loading...</div>
-        </div>
-      </div>
-    );
+    return <div className="page-loading">Loading...</div>;
   }
 
   return (
-    <div className="app-shell">
-      <Sidebar />
+    <>
+      <header className="page-header">
+        <div>
+          <h1 className="page-title">Trend Monitor</h1>
+          <p className="page-subtitle">
+            Currently ranked trends across music, hashtags, and keywords
+          </p>
+        </div>
+      </header>
 
-      <main className="app-main">
-        <header className="page-header">
-          <div>
-            <h1 className="page-title">Trend Monitor</h1>
-            <p className="page-subtitle">
-              Currently ranked trends across music, hashtags, and keywords
-            </p>
-          </div>
-        </header>
+      {error && (
+        <div className="status-banner">
+          <span>{error}</span>
+        </div>
+      )}
 
-        {error && (
-          <div className="status-banner">
-            <span>{error}</span>
-          </div>
-        )}
+      {!loading && (
+        <div className="trends-container">
+          <TrendSection
+            title="Music Trends"
+            description="Currently trending audio tracks and sounds"
+            trends={musicTrends}
+          />
+          <TrendSection
+            title="Hashtag Trends"
+            description="Currently trending hashtags"
+            trends={hashtagTrends}
+          />
+          <TrendSection
+            title="Keyword Trends"
+            description="Currently trending caption keywords"
+            trends={keywordTrends}
+          />
+        </div>
+      )}
 
-        {!loading && (
-          <div className="trends-container">
-            <TrendSection
-              title="Music Trends"
-              description="Currently trending audio tracks and sounds"
-              trends={musicTrends}
-            />
-            <TrendSection
-              title="Hashtag Trends"
-              description="Currently trending hashtags"
-              trends={hashtagTrends}
-            />
-            <TrendSection
-              title="Keyword Trends"
-              description="Currently trending caption keywords"
-              trends={keywordTrends}
-            />
-          </div>
-        )}
-
-        {loading && (
-          <div className="trends-loading">
-            Loading trend data...
-          </div>
-        )}
-      </main>
-    </div>
+      {loading && (
+        <div className="trends-loading">
+          Loading trend data...
+        </div>
+      )}
+    </>
   );
 };
 

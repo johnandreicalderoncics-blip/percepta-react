@@ -32,12 +32,12 @@ const Sidebar = () => {
 
       <nav className="sidebar-nav">
         {NAV_ITEMS.map(({ to, label }) => (
-          <Link key={to} to={to} className={`nav-item${pathname === to ? ' active' : ''}`}>
+          <Link key={to} to={to} className={`nav-item${pathname === to ? ' active' : ''}`} aria-current={pathname === to ? 'page' : undefined}>
             {label}
           </Link>
         ))}
         {isAdmin() && (
-          <Link to="/admin-overview" className={`nav-item${pathname === '/admin-overview' ? ' active' : ''}`}>
+          <Link to="/admin-overview" className={`nav-item${pathname === '/admin-overview' ? ' active' : ''}`} aria-current={pathname === '/admin-overview' ? 'page' : undefined}>
             Admin Overview
           </Link>
         )}

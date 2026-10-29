@@ -40,22 +40,33 @@
 }
 
 .stat-box {
-  padding: 1.25rem 1.4rem;
-  background: var(--butter);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-md);
+  padding: 1.1rem 1.25rem;
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-top-width: 3px;
+  border-radius: var(--radius);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.28);
 }
-.stat-box:nth-child(2) { background: var(--sky); }
-.stat-box:nth-child(3) { background: var(--blush); }
-.stat-box:nth-child(4) { background: var(--mint); }
+/* positional accent rules — keep JSX order meaningful */
+.stat-box:nth-child(1) { border-top-color: var(--amber); }
+.stat-box:nth-child(2) { border-top-color: var(--navy); }
+.stat-box:nth-child(3) { border-top-color: var(--success); }
+.stat-box:nth-child(4) { border-top-color: #585c78; }
 
-.stat-box .stat-label { color: var(--ink); font-size: 0.95rem; font-weight: 600; margin-bottom: 0.35rem; }
-.stat-value { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.25rem; }
-.stat-change { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
-.stat-change.positive { color: #0F5E3B; }
+.stat-box .stat-label { color: #585c78; font-family: var(--font-display); font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem; }
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.stat-change { font-family: var(--font-sans); font-size: 0.85rem; font-weight: 500; color: #585c78; }
+.stat-change.positive { color: var(--success); }
 .stat-change.negative { color: var(--danger); }
-.stat-change.neutral { color: var(--ink-soft); }
+.stat-change.neutral { color: #585c78; }
 
 /* ---------- Platform score cards ---------- */
 .platform-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
@@ -63,15 +74,17 @@
 .platform-score {
   padding: 1.25rem;
   text-align: center;
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-sm);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-top-width: 3px;
+  border-radius: var(--radius);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.28);
 }
-.platform-score.tiktok { background: var(--sky); }
-.platform-score.instagram { background: var(--blush); }
+.platform-score.tiktok { border-top-color: var(--navy); }
+.platform-score.instagram { border-top-color: var(--amber); }
 
 .platform-info { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.9rem; }
-.platform-name { font-weight: 700; }
+.platform-name { font-family: var(--font-display); font-weight: 600; }
 
 .score-circle {
   width: 5.5rem;
@@ -80,27 +93,35 @@
   place-items: center;
   margin: 0 auto 0.75rem;
   background: var(--white);
-  border: 3px solid var(--ink);
+  border: 3px solid var(--line);
   border-radius: 50%;
 }
-.score-value { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--ink); }
-.score-label { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+.score-value {
+  font-family: var(--font-mono);
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.score-label { font-size: 0.9rem; font-weight: 600; color: #585c78; }
 
 .trend-indicator { margin-top: 0.6rem; font-size: 0.9rem; font-weight: 600; }
-.trend-up { color: #0F5E3B; }
-.trend-stable { color: var(--ink-soft); }
+.trend-up { color: var(--success); }
+.trend-stable { color: #585c78; }
 
 .mini-score {
   padding: 0.25rem 0.65rem;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.9rem;
   color: var(--ink);
-  border: 2px solid var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--line);
   border-radius: 999px;
+  font-variant-numeric: tabular-nums;
 }
-.mini-score.tiktok { background: var(--sky); }
-.mini-score.instagram { background: var(--blush); }
+.mini-score.tiktok { color: var(--navy); border-color: var(--navy); }
+.mini-score.instagram { color: var(--amber-deep); border-color: var(--amber-deep); }
 
 @media (max-width: 968px) {
   .platform-scores { grid-template-columns: 1fr; }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Sidebar from '../shared/components/Sidebar';
 import './pages.css';
 
 const HistoryPage = () => {
@@ -54,97 +53,87 @@ const HistoryPage = () => {
   );
 
   if (loading) {
-    return (
-      <div className="app-shell">
-        <div className="app-main">
-          <div className="page-loading">Loading...</div>
-        </div>
-      </div>
-    );
+    return <div className="page-loading">Loading...</div>;
   }
 
   return (
-    <div className="app-shell">
-      <Sidebar />
+    <>
+      <header className="page-header">
+        <div>
+          <h1 className="page-title">Analysis History</h1>
+          <p className="page-subtitle">Your past video analyses and performance data</p>
+        </div>
+      </header>
 
-      <main className="app-main">
-        <header className="page-header">
-          <div>
-            <h1 className="page-title">Analysis History</h1>
-            <p className="page-subtitle">Your past video analyses and performance data</p>
+      {error && (
+        <div className="status-banner">
+          <span>{error}</span>
+          <button onClick={() => setError(null)} className="btn-error-close" aria-label="Dismiss">×</button>
+        </div>
+      )}
+
+      {history.length > 0 ? (
+        <div className="history-container">
+          <div className="history-filters">
+            <input
+              type="text"
+              placeholder="Search history..."
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button onClick={() => {
+              // In a real app, you would clear history
+              if (window.confirm('Delete all history?')) {
+                setHistory([]);
+              }
+            }} className="btn-danger">
+              Clear All
+            </button>
           </div>
-        </header>
 
-        {error && (
-          <div className="status-banner">
-            <span>{error}</span>
-            <button onClick={() => setError(null)} className="btn-error-close" aria-label="Dismiss">×</button>
-          </div>
-        )}
-
-        {history.length > 0 ? (
-          <div className="history-container">
-            <div className="history-filters">
-              <input
-                type="text"
-                placeholder="Search history..."
-                className="search-input"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button onClick={() => {
-                // In a real app, you would clear history
-                if (window.confirm('Delete all history?')) {
-                  setHistory([]);
-                }
-              }} className="btn-danger">
-                Clear All
-              </button>
-            </div>
-
-            <div className="history-entries">
-              {filteredHistory.map(item => (
-                <div key={item.id} className="history-entry">
-                  <div className="history-entry-content">
-                    <div className="entry-thumbnail" aria-hidden="true">
-                      <span>{item.title.charAt(0)}</span>
-                      <span className="duration-badge">{item.duration}</span>
-                    </div>
-                    <div className="entry-details">
-                      <h3 className="entry-title">{item.title}</h3>
-                      <p className="entry-date">{item.date}</p>
-                      <div className="entry-scores">
-                        <span className="mini-score tiktok">TikTok {item.tiktok}</span>
-                        <span className="mini-score instagram">IG {item.instagram}</span>
-                      </div>
-                    </div>
+          <div className="history-entries">
+            {filteredHistory.map(item => (
+              <div key={item.id} className="history-entry">
+                <div className="history-entry-content">
+                  <div className="entry-thumbnail" aria-hidden="true">
+                    <span>{item.title.charAt(0)}</span>
+                    <span className="duration-badge mono">{item.duration}</span>
                   </div>
-                  <div className="history-entry-actions">
-                    <button
-                      onClick={() => handleDeleteHistory(item.id)}
-                      className="btn-delete-history"
-                    >
-                      Delete
-                    </button>
+                  <div className="entry-details">
+                    <h3 className="entry-title">{item.title}</h3>
+                    <p className="entry-date mono">{item.date}</p>
+                    <div className="entry-scores">
+                      <span className="mini-score tiktok">TikTok {item.tiktok}</span>
+                      <span className="mini-score instagram">IG {item.instagram}</span>
+                    </div>
                   </div>
                 </div>
-              ))}
-              {filteredHistory.length === 0 && (
-                <p className="trends-empty">No analyses match "{searchQuery}"</p>
-              )}
-            </div>
+                <div className="history-entry-actions">
+                  <button
+                    onClick={() => handleDeleteHistory(item.id)}
+                    className="btn-delete-history"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+            {filteredHistory.length === 0 && (
+              <p className="trends-empty">No analyses match "{searchQuery}"</p>
+            )}
           </div>
-        ) : (
-          <div className="history-empty">
-            <h3>No history yet</h3>
-            <p>Upload and analyze videos to see your history here.</p>
-            <Link to="/upload" className="btn-primary">
-              Upload First Video
-            </Link>
-          </div>
-        )}
-      </main>
-    </div>
+        </div>
+      ) : (
+        <div className="history-empty">
+          <h3>No history yet</h3>
+          <p>Upload and analyze videos to see your history here.</p>
+          <Link to="/upload" className="btn-primary">
+            Upload First Video
+          </Link>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -1,12 +1,12 @@
-/* Styles for the Upload, History and Settings pages, which previously had
-   no styles at all. Uses the shared tokens from index.css. */
+/* Styles for the Upload, History and Settings pages. Uses the shared tokens
+   from index.css (navy/amber/paper night-chart theme). */
 
 /* ---------- Loading state ---------- */
 .page-loading {
   padding: 4rem 2rem;
   text-align: center;
   font-size: 1.05rem;
-  color: var(--ink-soft);
+  color: rgba(253, 252, 246, 0.85);
 }
 
 /* ---------- Status banner (errors + confirmations) ---------- */
@@ -19,15 +19,14 @@
   margin-bottom: 1.25rem;
   font-size: 0.95rem;
   font-weight: 500;
-  color: #7A140F;
-  background: #FFE3E0;
+  color: var(--danger);
+  background: var(--paper);
   border: 2px solid var(--danger);
   border-radius: var(--r-sm);
 }
 
 .status-banner.success {
-  color: #0F5E3B;
-  background: var(--mint);
+  color: var(--success);
   border-color: var(--success);
 }
 
@@ -57,14 +56,17 @@
   gap: 0.5rem;
   padding: 4rem 2rem;
   text-align: center;
-  background: var(--white);
-  border: 2.5px dashed var(--ink);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-md);
+  background: var(--paper);
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.28);
   cursor: pointer;
-  transition: background-color 0.12s ease;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
 }
-.upload-area:hover, .upload-area:focus-within { background: var(--lilac); }
+.upload-area:hover, .upload-area:focus-within {
+  background: rgba(244, 167, 43, 0.06);
+  border-color: var(--amber);
+}
 
 .upload-area h3 { font-size: 1.5rem; margin: 0; }
 .upload-area p { margin: 0; color: var(--ink-soft); }
@@ -82,10 +84,10 @@
 
 .upload-preview {
   padding: 1.5rem;
-  background: var(--white);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-md);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.28);
 }
 
 .upload-info { margin-bottom: 1.25rem; }
@@ -94,29 +96,30 @@
 
 .results-header { margin-bottom: 1.5rem; }
 .results-header h2 { font-size: 1.5rem; line-height: 1.2; margin: 0 0 0.35rem; }
-.results-date { margin: 0; color: var(--ink-soft); }
+.results-date { margin: 0; color: var(--ink-soft); font-size: 0.9rem; }
 
 .results-container .platform-scores { margin-bottom: 1.5rem; }
 
 .recommendations {
   padding: 1.25rem;
   margin-bottom: 1.5rem;
-  background: var(--butter);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-sm);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-left: 4px solid var(--amber);
+  border-radius: var(--radius);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.28);
 }
 .recommendations h3 { font-size: 1.15rem; margin: 0 0 0.4rem; }
 .recommendations p { margin: 0; line-height: 1.55; }
 
-.upload-loading { padding: 4rem 2rem; text-align: center; color: var(--ink-soft); }
+.upload-loading { padding: 4rem 2rem; text-align: center; color: rgba(253, 252, 246, 0.85); }
 
 .loading-spinner {
   width: 3rem;
   height: 3rem;
   margin: 0 auto 1rem;
-  border: 4px solid var(--lavender);
-  border-top-color: var(--grape);
+  border: 4px solid rgba(253, 252, 246, 0.2);
+  border-top-color: var(--amber);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -140,13 +143,13 @@
   font: inherit;
   font-size: 0.95rem;
   color: var(--ink);
-  background: var(--white);
-  border: 2.5px solid var(--ink);
-  border-radius: 999px;
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: 10px;
 }
 .search-input:focus {
   outline: 3px solid transparent;
-  box-shadow: 0 0 0 4px var(--lavender), 3px 3px 0 var(--grape);
+  box-shadow: 0 0 0 3px rgba(244, 167, 43, 0.35);
 }
 
 .btn-danger {
@@ -155,20 +158,28 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.55rem 1.1rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-weight: 600;
   font-size: 0.95rem;
   color: var(--danger);
-  background: var(--white);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-sm);
-  box-shadow: var(--shadow-sm);
+  background: var(--paper);
+  border: 2px solid var(--danger);
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
 }
-.btn-danger:hover { background: #FFE3E0; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
-.btn-danger:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+.btn-danger:hover { background: rgba(194, 65, 44, 0.10); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.28); }
+.btn-danger:active { transform: translate(2px, 2px); box-shadow: 0 0 0 rgba(0, 0, 0, 0.28); }
 
-.history-entries { display: flex; flex-direction: column; gap: 0.9rem; }
+.history-entries {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
 
 .history-entry {
   display: flex;
@@ -176,11 +187,10 @@
   align-items: center;
   gap: 1rem;
   padding: 0.85rem 1rem;
-  background: var(--white);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-sm);
+  background: var(--paper);
+  border-bottom: 1px solid rgba(18, 20, 44, 0.12);
 }
+.history-entry:last-child { border-bottom: none; }
 
 .history-entry-content { display: flex; align-items: center; gap: 1rem; min-width: 0; }
 
@@ -194,10 +204,9 @@
   font-family: var(--font-display);
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--ink);
-  background: var(--lavender);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-sm);
+  color: var(--paper);
+  background: var(--navy);
+  border-radius: 10px;
 }
 .entry-thumbnail .duration-badge {
   position: absolute;
@@ -205,9 +214,9 @@
   bottom: -0.5rem;
   padding: 0.1rem 0.4rem;
   font-size: 0.7rem;
-  font-weight: 700;
-  background: var(--ink);
-  color: var(--white);
+  font-weight: 600;
+  background: var(--line);
+  color: var(--paper);
   border-radius: 999px;
 }
 
@@ -220,21 +229,21 @@
   flex-shrink: 0;
   padding: 0.45rem 0.9rem;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--danger);
   background: none;
   border: 2px solid transparent;
-  border-radius: var(--r-sm);
+  border-radius: 10px;
   cursor: pointer;
 }
-.btn-delete-history:hover { border-color: var(--danger); }
+.btn-delete-history:hover { border-color: var(--danger); background: rgba(194, 65, 44, 0.08); }
 
 .history-empty {
   padding: 4rem 2rem;
   text-align: center;
-  background: var(--white);
-  border: 2.5px dashed var(--ink);
-  border-radius: var(--r-lg);
+  background: var(--paper);
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
 }
 .history-empty h3 { font-size: 1.4rem; margin: 0 0 0.4rem; }
 .history-empty p { color: var(--ink-soft); margin: 0 0 1.5rem; }
@@ -248,10 +257,10 @@
 
 .settings-section {
   padding: 1.5rem;
-  background: var(--white);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-md);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.28);
 }
 
 .settings-section .section-title { font-size: 1.3rem; margin: 0 0 1rem; }
@@ -264,12 +273,12 @@
   align-items: center;
   gap: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 2px dashed var(--lavender);
+  border-bottom: 1px solid rgba(18, 20, 44, 0.12);
 }
 .setting-item:last-child { padding-bottom: 0; border-bottom: none; }
 
 .setting-item h3 { font-size: 1rem; margin: 0 0 0.15rem; }
-.setting-value { margin: 0; color: var(--ink-soft); }
+.setting-value { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
 
 .setting-label {
   display: flex;
@@ -281,7 +290,7 @@
 .setting-label input[type="checkbox"] {
   width: 1.15rem;
   height: 1.15rem;
-  accent-color: var(--grape);
+  accent-color: var(--amber);
 }
 
 .setting-label select {
@@ -289,17 +298,19 @@
   font: inherit;
   font-size: 0.95rem;
   color: var(--ink);
-  background: var(--cream);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-sm);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: 10px;
 }
 
 .status-indicator {
   padding: 0.25rem 0.75rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  background: var(--mint);
-  border: 2px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--success);
+  background: var(--paper);
+  border: 2px solid var(--success);
   border-radius: 999px;
 }
 
@@ -309,7 +320,7 @@
 
 .btn-block { width: 100%; }
 
-/* ---------- Modal (delete account) ---------- */
+/* ---------- Modal (delete account / admin forms) ---------- */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -317,15 +328,15 @@
   display: grid;
   place-items: center;
   padding: 1rem;
-  background: rgba(31, 21, 53, 0.45);
+  background: rgba(14, 20, 80, 0.55);
 }
 
 .modal-content {
   width: min(440px, 100%);
-  background: var(--white);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.28);
 }
 
 .modal-header {
@@ -333,7 +344,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  border-bottom: 2.5px dashed var(--lavender);
+  border-bottom: 1px solid rgba(18, 20, 44, 0.12);
 }
 .modal-header h3 { margin: 0; font-size: 1.25rem; }
 
@@ -346,12 +357,13 @@
   line-height: 1;
   background: none;
   border: 2px solid transparent;
-  border-radius: var(--r-sm);
+  border-radius: 10px;
   cursor: pointer;
 }
-.btn-close:hover { border-color: var(--ink); }
+.btn-close:hover { border-color: var(--line); }
 
 .modal-body { padding: 1.5rem; }
 .modal-body p { margin: 0 0 1.25rem; line-height: 1.6; }
+.modal-body .form-group { margin-bottom: 1rem; }
 
 .modal-form-actions { display: flex; justify-content: flex-end; gap: 0.9rem; }

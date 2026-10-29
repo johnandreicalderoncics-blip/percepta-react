@@ -1,14 +1,14 @@
 /* Admin overview page. Shell, sidebar, stat boxes and modals come from
-   Sidebar.css, Dashboard.css (stats-grid), and pages.css. */
+   Sidebar.css, ui.css (stats-grid), and pages.css. */
 
 .admin-content { display: flex; flex-direction: column; gap: 1.5rem; }
 
 .admin-section {
   padding: 1.5rem;
-  background: var(--white);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-md);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.28);
 }
 
 .admin-section .section-title { font-size: 1.3rem; margin: 0 0 1rem; }
@@ -22,8 +22,8 @@
 /* ---------- Users table ---------- */
 .users-table {
   overflow-x: auto;
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-md);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
 }
 
 .users-table table {
@@ -35,14 +35,14 @@
 .users-table th, .users-table td {
   padding: 0.75rem 1rem;
   text-align: left;
-  border-bottom: 2px solid var(--lavender);
+  border-bottom: 1px solid rgba(18, 20, 44, 0.12);
 }
 
 .users-table thead th {
   font-family: var(--font-display);
-  font-weight: 700;
-  background: var(--lilac);
-  border-bottom: 2.5px solid var(--ink);
+  font-weight: 600;
+  background: var(--paper);
+  border-bottom: 2px solid var(--line);
 }
 
 .users-table tbody tr:last-child td { border-bottom: none; }
@@ -53,36 +53,35 @@
   padding: 0.35rem 0.8rem;
   margin-right: 0.4rem;
   font-size: 0.85rem;
-  font-weight: 700;
-  background: var(--white);
-  border: 2px solid var(--ink);
-  border-radius: var(--r-sm);
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.12s ease;
 }
-.btn-edit:hover { background: var(--butter); }
+.btn-edit:hover { background: var(--lilac); }
 .btn-delete { color: var(--danger); border-color: var(--danger); }
-.btn-delete:hover { background: #FFE3E0; }
+.btn-delete:hover { background: rgba(194, 65, 44, 0.10); }
 
 .no-users { text-align: center; color: var(--ink-soft); padding: 2rem; }
 
 .role-badge, .status-badge {
   display: inline-block;
   padding: 0.2rem 0.65rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  border: 2px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: 2px solid var(--line);
   border-radius: 999px;
-  background: var(--white);
+  background: var(--paper);
 }
-.role-badge.admin { background: var(--butter); }
-.status-badge.unconfirmed { background: var(--lavender); }
+.role-badge.admin { background: var(--amber); color: var(--line); }
+.status-badge.unconfirmed { background: rgba(28, 42, 134, 0.10); color: var(--navy); }
 
 /* ---------- Loading state ---------- */
-.admin-loading { padding: 4rem 2rem; text-align: center; color: var(--ink-soft); }
-
-/* Form groups inside modals need spacing between them */
-.modal-body .form-group { margin-bottom: 1rem; }
+.admin-loading { padding: 4rem 2rem; text-align: center; color: rgba(253, 252, 246, 0.85); }
 
 @media (max-width: 640px) {
   .user-actions { justify-content: flex-start; }

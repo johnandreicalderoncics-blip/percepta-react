@@ -13,15 +13,16 @@
 
 .form-footer { display: flex; justify-content: flex-end; margin-top: -0.5rem; }
 
-/* Info panel: lavender block, like a blingify feed tile */
+/* Info panel: navy block, like a chart legend card */
 .auth-info {
   display: flex;
   align-items: center;
   padding: 2.75rem;
-  background: var(--lavender);
-  border: 2.5px solid var(--ink);
+  background: var(--navy-deep);
+  border: 2px solid var(--line);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-lg);
+  color: var(--paper);
 }
 
 .info-content h3 {
@@ -31,7 +32,7 @@
   margin: 0 0 1rem;
   text-wrap: balance;
 }
-.info-content p { color: var(--ink); line-height: 1.6; margin: 0 0 2rem; }
+.info-content p { color: rgba(253, 252, 246, 0.82); line-height: 1.6; margin: 0 0 2rem; }
 
 .info-stats { display: flex; flex-direction: column; gap: 1rem; }
 
@@ -40,15 +41,16 @@
   align-items: center;
   gap: 1rem;
   padding: 0.9rem 1.1rem;
-  background: var(--white);
-  border: 2.5px solid var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--line);
   border-radius: var(--r-md);
   box-shadow: var(--shadow-sm);
+  color: var(--ink);
 }
-.info-stat:nth-child(2) { background: var(--butter); }
+.info-stat:nth-child(2) { background: var(--lilac); }
 .info-text { display: flex; flex-direction: column; }
-.info-number { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; line-height: 1.1; }
-.info-label { font-size: 0.95rem; color: var(--ink); }
+.info-number { font-family: var(--font-mono); font-size: 1.75rem; font-weight: 600; line-height: 1.1; }
+.info-label { font-size: 0.95rem; color: var(--ink-soft); }
 
 @media (max-width: 968px) {
   .auth-container { grid-template-columns: 1fr; }
