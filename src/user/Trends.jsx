@@ -1,11 +1,34 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../shared/contexts/AuthContext';
+import Sidebar from '../shared/components/Sidebar';
 import './Trends.css';
 
+const TrendSection = ({ title, description, trends }) => (
+  <section className="trends-section">
+    <h2 className="section-title">{title}</h2>
+    <p className="section-description">{description}</p>
+    {trends.length > 0 ? (
+      <ol className="trends-list">
+        {trends.map((trend) => (
+          <li key={trend.id} className="trend-item">
+            <div className="trend-rank">{trend.id}</div>
+            <div className="trend-content">
+              <span className="trend-value">{trend.value}</span>
+              <span className="trend-meta">
+                {trend.status === 'New' ? 'New' : `Rising, TGR +${trend.tgr}%`}
+              </span>
+            </div>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p className="trends-empty">No {title.toLowerCase()} available</p>
+    )}
+  </section>
+);
+
 const Trends = () => {
-  const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
+  const { loading: authLoading } = useAuth();
 
   // Mock data for trend lists based on CHP 1-3.txt description
   // In a real implementation, this would be fetched from Supabase or an API
@@ -14,9 +37,6 @@ const Trends = () => {
   const [keywordTrends, setKeywordTrends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Get user name from metadata or email
-  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
 
   // Fetch trend data (mock implementation)
   useEffect(() => {
@@ -84,151 +104,51 @@ const Trends = () => {
 
   if (authLoading) {
     return (
-      <div className="trends-page">
-        <div className="trends-loading">Loading...</div>
+      <div className="app-shell">
+        <div className="app-main">
+          <div className="page-loading">Loading...</div>
+        </div>
       </div>
     );
   }
 
-  const handleLogout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (!error) {
-        navigate('/login');
-      }
-    } catch (err) {
-      console.error('Error signing out:', err);
-    }
-  };
-
   return (
-    <div className="trends-page">
-      <aside className="sidebar">
-        <div className="sidebar-logo">
-          <span className="logo-text">PERCE<span className="logo-accent">PTA</span></span>
-        </div>
+    <div className="app-shell">
+      <Sidebar />
 
-        <nav className="sidebar-nav">
-          <Link to="/dashboard" className="nav-item">
-            <span className="nav-icon">📊</span>
-            <span>Dashboard</span>
-          </Link>
-          <Link to="/upload" className="nav-item">
-            <span className="nav-icon">📤</span>
-            <span>Upload</span>
-          </Link>
-          <Link to="/trends" className="nav-item active">
-            <span className="nav-icon">📈</span>
-            <span>Trends</span>
-          </Link>
-          <Link to="/history" className="nav-item">
-            <span className="nav-icon">🕐</span>
-            <span>History</span>
-          </Link>
-          <Link to="/settings" className="nav-item">
-            <span className="nav-icon">⚙️</span>
-            <span>Settings</span>
-          </Link>
-        </nav>
-
-        <div className="sidebar-footer">
-          <div className="user-profile">
-            <div className="user-avatar">
-              {userName.substring(0, 2).toUpperCase()}
-            </div>
-            <div className="user-info">
-              <div className="user-name">{userName}</div>
-              <div className="user-email">{user?.email}</div>
-            </div>
+      <main className="app-main">
+        <header className="page-header">
+          <div>
+            <h1 className="page-title">Trend Monitor</h1>
+            <p className="page-subtitle">
+              Currently ranked trends across music, hashtags, and keywords
+            </p>
           </div>
-          <button onClick={handleLogout} className="btn-logout">
-            🚪 Logout
-          </button>
-        </div>
-      </aside>
-
-      <main className="trends-main">
-        <header className="trends-header">
-          <h1 className="trends-title">Trend Monitor</h1>
-          <p className="trends-subtitle">View currently ranked trends across Music, Hashtags, and Keywords</p>
         </header>
 
         {error && (
-          <div className="trends-error">
-            {error}
+          <div className="status-banner">
+            <span>{error}</span>
           </div>
         )}
 
         {!loading && (
           <div className="trends-container">
-            {/* Music Trends Section */}
-            <section className="trends-section">
-              <h2 className="section-title">Music Trends</h2>
-              <p className="section-description">Currently trending audio tracks and sounds</p>
-              {musicTrends.length > 0 ? (
-                <ol className="trends-list">
-                  {musicTrends.map((trend) => (
-                    <li key={trend.id} className="trend-item">
-                      <div className="trend-rank">{trend.id}</div>
-                      <div className="trend-content">
-                        <span className="trend-value">{trend.value}</span>
-                        <span className="trend-meta">
-                          {trend.status === 'New' ? 'New' : `rising, TGR +${trend.tgr}%`}
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              ) : (
-                <p className="trends-empty">No music trends available</p>
-              )}
-            </section>
-
-            {/* Hashtag Trends Section */}
-            <section className="trends-section">
-              <h2 className="section-title">Hashtag Trends</h2>
-              <p className="section-description">Currently trending hashtags</p>
-              {hashtagTrends.length > 0 ? (
-                <ol className="trends-list">
-                  {hashtagTrends.map((trend) => (
-                    <li key={trend.id} className="trend-item">
-                      <div className="trend-rank">{trend.id}</div>
-                      <div className="trend-content">
-                        <span className="trend-value">{trend.value}</span>
-                        <span className="trend-meta">
-                          {trend.status === 'New' ? 'New' : `rising, TGR +${trend.tgr}%`}
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              ) : (
-                <p className="trends-empty">No hashtag trends available</p>
-              )}
-            </section>
-
-            {/* Keyword Trends Section */}
-            <section className="trends-section">
-              <h2 className="section-title">Keyword Trends</h2>
-              <p className="section-description">Currently trending caption keywords</p>
-              {keywordTrends.length > 0 ? (
-                <ol className="trends-list">
-                  {keywordTrends.map((trend) => (
-                    <li key={trend.id} className="trend-item">
-                      <div className="trend-rank">{trend.id}</div>
-                      <div className="trend-content">
-                        <span className="trend-value">{trend.value}</span>
-                        <span className="trend-meta">
-                          {trend.status === 'New' ? 'New' : `rising, TGR +${trend.tgr}%`}
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              ) : (
-                <p className="trends-empty">No keyword trends available</p>
-              )}
-            </section>
+            <TrendSection
+              title="Music Trends"
+              description="Currently trending audio tracks and sounds"
+              trends={musicTrends}
+            />
+            <TrendSection
+              title="Hashtag Trends"
+              description="Currently trending hashtags"
+              trends={hashtagTrends}
+            />
+            <TrendSection
+              title="Keyword Trends"
+              description="Currently trending caption keywords"
+              trends={keywordTrends}
+            />
           </div>
         )}
 

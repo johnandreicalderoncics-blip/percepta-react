@@ -1,0 +1,107 @@
+/* Shared UI pieces used across more than one page: page headers and
+   platform score cards. Loaded globally from main.jsx. */
+
+/* ---------- Page headers ---------- */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 0.35rem;
+  color: var(--ink);
+}
+
+.page-subtitle { color: var(--ink-soft); font-size: 1.05rem; margin: 0; }
+
+/* Section headings inside a logged-in page */
+.app-main .section-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: left;
+  margin: 0 0 1.25rem;
+  color: var(--ink);
+}
+
+/* ---------- Stat boxes ---------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.stat-box {
+  padding: 1.25rem 1.4rem;
+  background: var(--butter);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+}
+.stat-box:nth-child(2) { background: var(--sky); }
+.stat-box:nth-child(3) { background: var(--blush); }
+.stat-box:nth-child(4) { background: var(--mint); }
+
+.stat-box .stat-label { color: var(--ink); font-size: 0.95rem; font-weight: 600; margin-bottom: 0.35rem; }
+.stat-value { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.25rem; }
+.stat-change { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+.stat-change.positive { color: #0F5E3B; }
+.stat-change.negative { color: var(--danger); }
+.stat-change.neutral { color: var(--ink-soft); }
+
+/* ---------- Platform score cards ---------- */
+.platform-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+.platform-score {
+  padding: 1.25rem;
+  text-align: center;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+}
+.platform-score.tiktok { background: var(--sky); }
+.platform-score.instagram { background: var(--blush); }
+
+.platform-info { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.9rem; }
+.platform-name { font-weight: 700; }
+
+.score-circle {
+  width: 5.5rem;
+  height: 5.5rem;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 0.75rem;
+  background: var(--white);
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+}
+.score-value { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--ink); }
+.score-label { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+
+.trend-indicator { margin-top: 0.6rem; font-size: 0.9rem; font-weight: 600; }
+.trend-up { color: #0F5E3B; }
+.trend-stable { color: var(--ink-soft); }
+
+.mini-score {
+  padding: 0.25rem 0.65rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+}
+.mini-score.tiktok { background: var(--sky); }
+.mini-score.instagram { background: var(--blush); }
+
+@media (max-width: 968px) {
+  .platform-scores { grid-template-columns: 1fr; }
+}

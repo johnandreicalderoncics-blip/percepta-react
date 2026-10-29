@@ -1,45 +1,27 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../shared/contexts/AuthContext';
+import Sidebar from '../shared/components/Sidebar';
 import './Dashboard.css';
 
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning';
+  if (hour < 18) return 'Good afternoon';
+  return 'Good evening';
+};
+
 const Dashboard = () => {
-  const navigate = useNavigate();
-  const { user, signOut } = useAuth();
-  const [uploadedVideo, setUploadedVideo] = useState(null);
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setUploadedVideo(file);
-      console.log('Video uploaded:', file.name);
-    }
-  };
-
-  const handleLogout = async () => {
-    const { error } = await signOut();
-    if (!error) {
-      navigate('/login');
-    }
-  };
+  const { user } = useAuth();
 
   // Get user name from metadata or email
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
-  // Check if user is admin (using same logic as AuthContext for consistency)
-  const isAdmin = user?.app_metadata?.role === 'admin' ||
-                 (user?.user_metadata?.role === 'admin' &&
-                  process.env.NODE_ENV === 'development');
 
   // Mock data for demonstration
   const currentAnalysis = {
     videoTitle: 'Good morning, Juan!',
     uploadDate: 'Sep 29, 2026',
     tiktokScore: 75,
-    instagramScore: 78,
-    analysis: [
-      { platform: 'TikTok', score: 75, trend: 'rising' },
-      { platform: 'Instagram Reels', score: 78, trend: 'stable' }
-    ]
+    instagramScore: 78
   };
 
   const recentAnalyses = [
@@ -49,72 +31,16 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="dashboard-page">
-      <aside className="sidebar">
-        <div className="sidebar-logo">
-          <span className="logo-text">PERCE<span className="logo-accent">PTA</span></span>
-        </div>
+    <div className="app-shell">
+      <Sidebar />
 
-        <nav className="sidebar-nav">
-          <Link to="/dashboard" className="nav-item active">
-            <span className="nav-icon">📊</span>
-            <span>Dashboard</span>
-          </Link>
-          <Link to="/upload" className="nav-item">
-            <span className="nav-icon">📤</span>
-            <span>Upload</span>
-          </Link>
-          <Link to="/trends" className="nav-item">
-            <span className="nav-icon">📈</span>
-            <span>Trends</span>
-          </Link>
-          <Link to="/history" className="nav-item">
-            <span className="nav-icon">🕐</span>
-            <span>History</span>
-          </Link>
-          <Link to="/settings" className="nav-item">
-            <span className="nav-icon">⚙️</span>
-            <span>Settings</span>
-          </Link>
-          {isAdmin && (
-            <Link to="/admin-overview" className="nav-item">
-              <span className="nav-icon">👥</span>
-              <span>Admin Overview</span>
-            </Link>
-          )}
-        </nav>
-
-        <div className="sidebar-footer">
-          <div className="user-profile">
-            <div className="user-avatar">
-              {userName.substring(0, 2).toUpperCase()}
-            </div>
-            <div className="user-info">
-              <div className="user-name">{userName}</div>
-              <div className="user-email">{user?.email}</div>
-            </div>
-          </div>
-          <button onClick={handleLogout} className="btn-logout">
-            🚪 Logout
-          </button>
-        </div>
-      </aside>
-
-      <main className="dashboard-main">
-        <header className="dashboard-header">
+      <main className="app-main">
+        <header className="page-header">
           <div>
-            <h1 className="dashboard-title">Good morning, {userName}!</h1>
-            <p className="dashboard-subtitle">Here's what's happening with your content today</p>
+            <h1 className="page-title">{getGreeting()}, {userName}</h1>
+            <p className="page-subtitle">Here's what's happening with your content today</p>
           </div>
-          <label className="btn-upload">
-            📤 Upload New Video
-            <input
-              type="file"
-              accept="video/*"
-              onChange={handleFileUpload}
-              hidden
-            />
-          </label>
+          <Link to="/upload" className="btn-upload">Upload a video</Link>
         </header>
 
         <div className="stats-grid">
@@ -125,9 +51,9 @@ const Dashboard = () => {
           </div>
 
           <div className="stat-box">
-            <div class="stat-label">Avg. TikTok Score</div>
-            <div class="stat-value">75</div>
-            <div class="stat-change neutral">Same as last week</div>
+            <div className="stat-label">Avg. TikTok Score</div>
+            <div className="stat-value">75</div>
+            <div className="stat-change neutral">Same as last week</div>
           </div>
 
           <div className="stat-box">
@@ -158,7 +84,6 @@ const Dashboard = () => {
               <div className="platform-scores">
                 <div className="platform-score tiktok">
                   <div className="platform-info">
-                    <span className="platform-icon">🎵</span>
                     <span className="platform-name">TikTok</span>
                   </div>
                   <div className="score-circle">
@@ -169,7 +94,6 @@ const Dashboard = () => {
 
                 <div className="platform-score instagram">
                   <div className="platform-info">
-                    <span className="platform-icon">📸</span>
                     <span className="platform-name">Instagram Reels</span>
                   </div>
                   <div className="score-circle">
@@ -183,21 +107,21 @@ const Dashboard = () => {
 
           <section className="recent-history">
             <h2 className="section-title">Recent Analyses</h2>
-            <div className="history-list">
+            <div className="recent-list">
               {recentAnalyses.map((item) => (
-                <div key={item.id} className="history-item">
-                  <div className="history-info">
-                    <h4 className="history-title">{item.title}</h4>
-                    <p className="history-date">{item.date}</p>
+                <div key={item.id} className="recent-item">
+                  <div className="recent-info">
+                    <h4 className="recent-title">{item.title}</h4>
+                    <p className="recent-date">{item.date}</p>
                   </div>
-                  <div className="history-scores">
+                  <div className="recent-scores">
                     <span className="mini-score tiktok">{item.tiktok}</span>
                     <span className="mini-score instagram">{item.instagram}</span>
                   </div>
                 </div>
               ))}
             </div>
-            <button className="btn-view-all">View All →</button>
+            <Link to="/history" className="btn-view-all">View all analyses</Link>
           </section>
         </div>
       </main>

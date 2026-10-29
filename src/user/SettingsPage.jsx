@@ -1,42 +1,42 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../shared/contexts/AuthContext';
+import Sidebar from '../shared/components/Sidebar';
+import './pages.css';
+
+const DEFAULT_SETTINGS = {
+  notifications: true,
+  emailUpdates: true,
+  language: 'en',
+  autoSave: true
+};
 
 const SettingsPage = () => {
-  const navigate = useNavigate();
   const { user, signOut } = useAuth();
-  const [settings, setSettings] = useState({
-    notifications: true,
-    emailUpdates: true,
-    theme: 'dark',
-    language: 'en',
-    autoSave: true
-  });
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [isSaving, setIsSaving] = useState(false);
+  const [status, setStatus] = useState('');
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
   // Get user name from metadata or email
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
 
-  const handleLogout = async () => {
-    const { error } = await signOut();
-    if (!error) {
-      navigate('/login');
-    }
-  };
-
   const handleSaveSettings = async () => {
     setIsSaving(true);
     try {
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       // In a real app, you would save to database or user metadata
-      alert('Settings saved successfully!');
+      setStatus('Settings saved.');
     } catch (err) {
-      alert('Failed to save settings. Please try again.');
+      setStatus('Could not save settings. Please try again.');
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleSignOutEverywhere = async () => {
+    // In a real app, you would revoke all sessions
+    setStatus('Signed out from all other devices.');
   };
 
   const handleDeleteAccount = async () => {
@@ -44,87 +44,29 @@ const SettingsPage = () => {
       // In a real app, you would delete the user account
       // For now, just sign out and redirect
       await signOut();
-      navigate('/login');
     } catch (err) {
-      alert('Failed to delete account. Please try again.');
+      setStatus('Could not delete your account. Please try again.');
     } finally {
       setShowDeleteAccountModal(false);
     }
   };
 
   return (
-    <div className="settings-page">
-      <aside className="sidebar">
-        <div className="sidebar-logo">
-          <span className="logo-text">PERCE<span className="logo-accent">PTA</span></span>
-        </div>
+    <div className="app-shell">
+      <Sidebar />
 
-        <nav className="sidebar-nav">
-          <Link to="/dashboard" className="nav-item">
-            <span className="nav-icon">📊</span>
-            <span>Dashboard</span>
-          </Link>
-          <Link to="/upload" className="nav-item">
-            <span className="nav-icon">📤</span>
-            <span>Upload</span>
-          </Link>
-          <Link to="/trends" className="nav-item">
-            <span className="nav-icon">📈</span>
-            <span>Trends</span>
-          </Link>
-          <Link to="/history" className="nav-item">
-            <span className="nav-icon">🕐</span>
-            <span>History</span>
-          </Link>
-          <Link to="/settings" className="nav-item active">
-            <span className="nav-icon">⚙️</span>
-            <span>Settings</span>
-          </Link>
-        </nav>
-
-        <div className="sidebar-footer">
-          <div className="user-profile">
-            <div className="user-avatar">
-              {userName.substring(0, 2).toUpperCase()}
-            </div>
-            <div className="user-info">
-              <div className="user-name">{userName}</div>
-              <div className="user-email">{user?.email}</div>
-            </div>
+      <main className="app-main">
+        <header className="page-header">
+          <div>
+            <h1 className="page-title">Settings</h1>
+            <p className="page-subtitle">Customize your Percepta experience</p>
           </div>
-          <button onClick={handleLogout} className="btn-logout">
-            🚪 Logout
-          </button>
-        </div>
-      </aside>
-
-      <main className="settings-main">
-        <header className="settings-header">
-          <h1 className="settings-title">Settings</h1>
-          <p className="settings-subtitle">Customize your Percepta experience</p>
         </header>
 
-        {showDeleteAccountModal && (
-          <div className="modal-backdrop" onClick={() => setShowDeleteAccountModal(false)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3>Delete Account</h3>
-                <button onClick={() => setShowDeleteAccountModal(false)} className="btn-close">
-                  ×
-                </button>
-              </div>
-              <div className="modal-body">
-                <p>Are you sure you want to delete your account? This action cannot be undone.</p>
-                <div className="modal-form-actions">
-                  <button onClick={() => setShowDeleteAccountModal(false)} className="btn-secondary">
-                    Cancel
-                  </button>
-                  <button onClick={handleDeleteAccount} className="btn-danger">
-                    Delete Account
-                  </button>
-                </div>
-              </div>
-            </div>
+        {status && (
+          <div className="status-banner success" role="status">
+            <span>{status}</span>
+            <button onClick={() => setStatus('')} className="btn-error-close" aria-label="Dismiss">×</button>
           </div>
         )}
 
@@ -142,7 +84,7 @@ const SettingsPage = () => {
               </div>
               <div className="setting-item">
                 <h3>Status</h3>
-                <span className="status-indicator active">Active</span>
+                <span className="status-indicator">Active</span>
               </div>
             </div>
           </section>
@@ -168,19 +110,6 @@ const SettingsPage = () => {
                     onChange={(e) => setSettings(prev => ({ ...prev, emailUpdates: e.target.checked }))}
                   />
                   Send email updates
-                </label>
-              </div>
-              <div className="setting-item">
-                <label className="setting-label">
-                  Theme:
-                  <select
-                    value={settings.theme}
-                    onChange={(e) => setSettings(prev => ({ ...prev, theme: e.target.value }))}
-                  >
-                    <option value="dark">Dark</option>
-                    <option value="light">Light</option>
-                    <option value="auto">Auto</option>
-                  </select>
                 </label>
               </div>
               <div className="setting-item">
@@ -213,19 +142,6 @@ const SettingsPage = () => {
                   Auto-save drafts
                 </label>
               </div>
-              <div className="setting-item">
-                <label className="setting-label">
-                  Data usage:
-                  <select
-                    value="standard"
-                    disabled
-                  >
-                    <option value="standard">Standard</option>
-                    <option value="low">Low</option>
-                    <option value="high">High</option>
-                  </select>
-                </label>
-              </div>
             </div>
           </section>
 
@@ -242,10 +158,7 @@ const SettingsPage = () => {
               </div>
               <div className="setting-item">
                 <button
-                  onClick={() => {
-                    // In a real app, you would log out from all devices
-                    alert('Logged out from all devices');
-                  }}
+                  onClick={handleSignOutEverywhere}
                   className="btn-secondary btn-block"
                 >
                   Sign out from all devices
@@ -264,18 +177,35 @@ const SettingsPage = () => {
             {isSaving ? 'Saving...' : 'Save Settings'}
           </button>
           <button onClick={() => {
-            // Reset to defaults
-            setSettings({
-              notifications: true,
-              emailUpdates: true,
-              theme: 'dark',
-              language: 'en',
-              autoSave: true
-            });
+            setSettings(DEFAULT_SETTINGS);
           }} className="btn-secondary">
             Reset to Defaults
           </button>
         </div>
+
+        {showDeleteAccountModal && (
+          <div className="modal-backdrop" onClick={() => setShowDeleteAccountModal(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Delete Account</h3>
+                <button onClick={() => setShowDeleteAccountModal(false)} className="btn-close" aria-label="Close">
+                  ×
+                </button>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                <div className="modal-form-actions">
+                  <button onClick={() => setShowDeleteAccountModal(false)} className="btn-secondary">
+                    Cancel
+                  </button>
+                  <button onClick={handleDeleteAccount} className="btn-danger">
+                    Delete Account
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

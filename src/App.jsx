@@ -13,7 +13,6 @@ import UploadPage from './user/UploadPage';
 import HistoryPage from './user/HistoryPage';
 import SettingsPage from './user/SettingsPage';
 import AdminOverview from './admin/AdminOverview';
-import './App.css';
 
 function App() {
   return (

@@ -1,124 +1,6 @@
-.dashboard-page {
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  min-height: 100vh;
-}
-
-/* ---------- Sidebar ---------- */
-.sidebar {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 2rem 1.1rem;
-  background: var(--lavender);
-  border-right: 3px solid var(--ink);
-}
-
-.sidebar-logo {
-  text-align: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 2.5px dashed var(--ink);
-}
-
-.sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: left;
-  color: var(--ink);
-  background: transparent;
-  border: 2.5px solid transparent;
-  border-radius: var(--r-sm);
-  transition: background-color 0.12s ease, border-color 0.12s ease;
-}
-.nav-item:hover { background: rgba(255, 255, 255, 0.55); border-color: var(--ink); }
-.nav-item.active {
-  background: var(--butter);
-  border-color: var(--ink);
-  box-shadow: var(--shadow-sm);
-  font-weight: 700;
-}
-.nav-icon { font-size: 1.25rem; }
-
-.sidebar-footer { padding-top: 1.5rem; border-top: 2.5px dashed var(--ink); }
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.65rem;
-  margin-bottom: 0.75rem;
-  background: var(--white);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-sm);
-}
-
-.user-avatar {
-  flex-shrink: 0;
-  width: 2.6rem;
-  height: 2.6rem;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--ink);
-  background: var(--bubblegum);
-  border: 2.5px solid var(--ink);
-  border-radius: 50%;
-}
-
-.user-info { flex: 1; min-width: 0; }
-.user-name { font-weight: 700; font-size: 0.95rem; }
-.user-email { font-size: 0.8rem; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-/* ---------- Main ---------- */
-.dashboard-main { padding: 2.5rem; min-width: 0; }
-
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.dashboard-title { font-size: clamp(1.9rem, 3.5vw, 2.6rem); font-weight: 700; line-height: 1.1; margin: 0 0 0.35rem; color: var(--ink); }
-.dashboard-subtitle { color: var(--ink-soft); font-size: 1.05rem; margin: 0; }
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 1.25rem;
-  margin-bottom: 2rem;
-}
-
-.stat-box {
-  padding: 1.25rem 1.4rem;
-  background: var(--butter);
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-md);
-}
-.stat-box:nth-child(2) { background: var(--sky); }
-.stat-box:nth-child(3) { background: var(--blush); }
-.stat-box:nth-child(4) { background: var(--mint); }
-
-.stat-box .stat-label { color: var(--ink); font-size: 0.95rem; font-weight: 600; margin-bottom: 0.35rem; text-transform: none; letter-spacing: 0; }
-.stat-value { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.25rem; }
-.stat-change { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
-.stat-change.positive { color: #0F5E3B; }
-.stat-change.negative { color: var(--danger); }
-.stat-change.neutral { color: var(--ink-soft); }
+/* Dashboard content styles. The app shell, sidebar, page header, stat boxes
+   and platform score cards live in shared/components/Sidebar.css and
+   shared/styles/ui.css. */
 
 .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start; }
 
@@ -130,52 +12,14 @@
   box-shadow: var(--shadow-md);
 }
 
-.dashboard-page .section-title {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  font-weight: 700;
-  text-align: left;
-  margin: 0 0 1.25rem;
-  color: var(--ink);
-}
-
 .analysis-card { padding: 0; }
 .analysis-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
 .analysis-title { font-size: 1.2rem; font-weight: 600; margin: 0 0 0.2rem; }
 .analysis-date { font-size: 0.95rem; color: var(--ink-soft); margin: 0; }
 
-.platform-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.recent-list { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 1.25rem; }
 
-.platform-score {
-  padding: 1.25rem;
-  text-align: center;
-  border: 2.5px solid var(--ink);
-  border-radius: var(--r-md);
-  box-shadow: var(--shadow-sm);
-}
-.platform-score.tiktok { background: var(--sky); }
-.platform-score.instagram { background: var(--blush); }
-
-.platform-info { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.9rem; }
-.platform-icon { font-size: 1.4rem; }
-.platform-name { font-weight: 700; }
-
-.score-circle {
-  width: 5.5rem;
-  height: 5.5rem;
-  display: grid;
-  place-items: center;
-  margin: 0 auto 0.75rem;
-  background: var(--white);
-  border: 3px solid var(--ink);
-  border-radius: 50%;
-}
-.score-value { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--ink); }
-.score-label { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
-
-.history-list { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 1.25rem; }
-
-.history-item {
+.recent-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -185,52 +29,13 @@
   border: 2.5px solid var(--ink);
   border-radius: var(--r-sm);
 }
-.history-title { font-size: 1rem; font-weight: 600; margin: 0 0 0.1rem; }
-.history-date { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
-.history-scores { display: flex; gap: 0.4rem; }
-
-.mini-score {
-  padding: 0.25rem 0.65rem;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--ink);
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-}
-.mini-score.tiktok { background: var(--sky); }
-.mini-score.instagram { background: var(--blush); }
+.recent-title { font-size: 1rem; font-weight: 600; margin: 0 0 0.1rem; }
+.recent-date { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+.recent-scores { display: flex; gap: 0.4rem; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1200px) { .content-grid { grid-template-columns: 1fr; } }
 
-@media (max-width: 968px) {
-  .dashboard-page { grid-template-columns: 1fr; }
-
-  /* Sidebar becomes a top bar so nav + logout stay reachable on mobile */
-  .sidebar {
-    position: static;
-    height: auto;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem 1rem;
-    padding: 0.75rem 1rem;
-    border-right: none;
-    border-bottom: 3px solid var(--ink);
-  }
-  .sidebar-logo { margin: 0; padding: 0; border: none; }
-  .sidebar-nav { order: 3; flex: 1 1 100%; flex-direction: row; overflow-x: auto; padding-bottom: 0.25rem; }
-  .nav-item { flex-shrink: 0; padding: 0.5rem 0.85rem; }
-  .sidebar-footer { padding: 0; border: none; margin-left: auto; }
-  .user-profile { display: none; }
-  .btn-logout { width: auto; padding: 0.5rem 1rem; }
-  .platform-scores { grid-template-columns: 1fr; }
-}
-
 @media (max-width: 640px) {
-  .dashboard-main { padding: 1.25rem 1rem; }
-  .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.9rem; }
-  .stat-value { font-size: 1.9rem; }
   .latest-analysis, .recent-history { padding: 1.1rem; }
 }

@@ -1,0 +1,89 @@
+/* Admin overview page. Shell, sidebar, stat boxes and modals come from
+   Sidebar.css, Dashboard.css (stats-grid), and pages.css. */
+
+.admin-content { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.admin-section {
+  padding: 1.5rem;
+  background: var(--white);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.admin-section .section-title { font-size: 1.3rem; margin: 0 0 1rem; }
+
+.admin-section .stats-grid { margin-bottom: 0; }
+
+.stat-value-sm { font-size: 1.5rem; }
+
+.user-actions { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+
+/* ---------- Users table ---------- */
+.users-table {
+  overflow-x: auto;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-md);
+}
+
+.users-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.users-table th, .users-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 2px solid var(--lavender);
+}
+
+.users-table thead th {
+  font-family: var(--font-display);
+  font-weight: 700;
+  background: var(--lilac);
+  border-bottom: 2.5px solid var(--ink);
+}
+
+.users-table tbody tr:last-child td { border-bottom: none; }
+
+.user-actions-cell { white-space: nowrap; }
+
+.btn-edit, .btn-delete {
+  padding: 0.35rem 0.8rem;
+  margin-right: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+.btn-edit:hover { background: var(--butter); }
+.btn-delete { color: var(--danger); border-color: var(--danger); }
+.btn-delete:hover { background: #FFE3E0; }
+
+.no-users { text-align: center; color: var(--ink-soft); padding: 2rem; }
+
+.role-badge, .status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--white);
+}
+.role-badge.admin { background: var(--butter); }
+.status-badge.unconfirmed { background: var(--lavender); }
+
+/* ---------- Loading state ---------- */
+.admin-loading { padding: 4rem 2rem; text-align: center; color: var(--ink-soft); }
+
+/* Form groups inside modals need spacing between them */
+.modal-body .form-group { margin-bottom: 1rem; }
+
+@media (max-width: 640px) {
+  .user-actions { justify-content: flex-start; }
+}

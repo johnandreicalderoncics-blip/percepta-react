@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../shared/contexts/AuthContext';
+import '../auth/Auth.css';
 import './Landing.css';
 
 const Landing = () => {
@@ -22,7 +23,7 @@ const Landing = () => {
       const { error } = await signIn(formData.email, formData.password);
 
       if (error) {
-        setError(error.message);
+        setError(error);
       } else {
         navigate('/dashboard');
       }
@@ -94,29 +95,27 @@ const Landing = () => {
               </button>
             </form>
 
-            <div className="auth-divider">
-              <span>or</span>
-            </div>
+            <p className="auth-switch">
+              New to Percepta? <Link to="/register" className="auth-link">Create an account</Link>
+            </p>
           </div>
 
           <div className="auth-info">
             <div className="info-content">
-              <h3>Know where to post it <span className="highlight">before</span> you go live.</h3>
-              <p>Upload your short-form video draft. Percepta evaluates its audio, captions, hashtags, and text overlays against the top 10 emerging trends in each category (Audio/Sound Identifier, Hashtags, and Caption Keywords) on both TikTok and Instagram Reels, then tells you exactly where to post it and what to change.</p>
+              <h3>Know where to post it before you go live.</h3>
+              <p>Upload your short-form video draft. Percepta checks its audio, captions, hashtags, and text overlays against the top 10 emerging trends in each category on TikTok and Instagram Reels, then tells you where to post it and what to change.</p>
 
               <div className="info-stats">
                 <div className="info-stat">
-                  <div className="info-icon">🎵</div>
                   <div className="info-text">
                     <div className="info-number">10</div>
                     <div className="info-label">Top trends per category</div>
                   </div>
                 </div>
                 <div className="info-stat">
-                  <div className="info-icon">📊</div>
                   <div className="info-text">
                     <div className="info-number">2</div>
-                    <div className="info-label">Platforms (TikTok/IG)</div>
+                    <div className="info-label">Platforms covered</div>
                   </div>
                 </div>
               </div>
@@ -131,22 +130,18 @@ const Landing = () => {
 
           <ol className="features-grid">
             <li className="feature-card">
-              <div className="feature-icon" aria-hidden="true">📤</div>
               <h3>Upload your video</h3>
               <p>Upload your short-form video draft (60 seconds or less, vertical format).</p>
             </li>
             <li className="feature-card">
-              <div className="feature-icon" aria-hidden="true">🤖</div>
               <h3>AI analysis</h3>
               <p>Our AI extracts speech, text overlays, and metadata, then compares them against daily trends.</p>
             </li>
             <li className="feature-card">
-              <div className="feature-icon" aria-hidden="true">📊</div>
               <h3>Get platform scores</h3>
               <p>Receive platform fit scores for TikTok and Instagram Reels.</p>
             </li>
             <li className="feature-card">
-              <div className="feature-icon" aria-hidden="true">✨</div>
               <h3>Act on the feedback</h3>
               <p>See specific recommendations to fix before you post.</p>
             </li>

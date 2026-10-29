@@ -20,7 +20,7 @@ const Register = () => {
     setError('');
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match!');
+      setError('Passwords do not match');
       return;
     }
 
@@ -86,14 +86,7 @@ const Register = () => {
           <p className="auth-subtitle">Start analyzing your content today</p>
 
           {error && (
-            <div style={{
-              padding: '0.75rem',
-              background: '#fee2e2',
-              color: '#dc2626',
-              borderRadius: '0.5rem',
-              fontSize: '0.875rem',
-              marginBottom: '1rem'
-            }}>
+            <div className="form-error">
               {error}
             </div>
           )}
@@ -157,10 +150,6 @@ const Register = () => {
             </button>
           </form>
 
-          <div className="auth-divider">
-            <span>or</span>
-          </div>
-
           <p className="auth-switch">
             Already have an account? <Link to="/" className="auth-link">Sign in</Link>
           </p>
@@ -168,22 +157,20 @@ const Register = () => {
 
         <div className="auth-info">
           <div className="info-content">
-            <h3>Know where to post it <span className="highlight">before</span> you go live.</h3>
-            <p>Upload your short-form video draft. Percepta evaluates its audio, captions, hashtags, and text overlays against today's top 30 trends.</p>
+            <h3>Know where to post it before you go live.</h3>
+            <p>Upload your short-form video draft. Percepta checks its audio, captions, hashtags, and text overlays against the top 10 emerging trends in each category on TikTok and Instagram Reels, then tells you where to post it and what to change.</p>
 
             <div className="info-stats">
               <div className="info-stat">
-                <div className="info-icon">🎵</div>
                 <div className="info-text">
-                  <div className="info-number">30</div>
-                  <div className="info-label">trends per platform</div>
+                  <div className="info-number">10</div>
+                  <div className="info-label">Top trends per category</div>
                 </div>
               </div>
               <div className="info-stat">
-                <div className="info-icon">📊</div>
                 <div className="info-text">
                   <div className="info-number">2</div>
-                  <div className="info-label">platforms (TikTok/IG)</div>
+                  <div className="info-label">Platforms covered</div>
                 </div>
               </div>
             </div>

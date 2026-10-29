@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../shared/contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+import Sidebar from '../shared/components/Sidebar';
+import '../user/pages.css';
+import './AdminOverview.css';
 
 const AdminOverview = () => {
   const { user } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [notice, setNotice] = useState('');
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [showEditUserModal, setShowEditUserModal] = useState(false);
   const [editUserData, setEditUserData] = useState(null);
@@ -95,7 +99,7 @@ const AdminOverview = () => {
       // });
 
       // For now, we'll simulate and show a message
-      alert('User creation would be implemented with Supabase admin API');
+      setNotice('User creation is not wired up yet.');
       setShowAddUserModal(false);
       fetchUsers(); // Refresh list
     } catch (err) {
@@ -112,7 +116,7 @@ const AdminOverview = () => {
       //   app_metadata: { role: updates.role }
       // });
 
-      alert('User update would be implemented with Supabase admin API');
+      setNotice('User updates are not wired up yet.');
       setShowEditUserModal(false);
       fetchUsers(); // Refresh list
     } catch (err) {
@@ -130,7 +134,7 @@ const AdminOverview = () => {
       //   app_metadata: { ...(await supabase.auth.admin.getUserById(userId)).data.user.app_metadata, status: 'disabled' }
       // });
 
-      alert('User disable would be implemented with Supabase admin API');
+      setNotice('Disabling users is not wired up yet.');
       fetchUsers(); // Refresh list
     } catch (err) {
       setError(err.message);
@@ -143,7 +147,7 @@ const AdminOverview = () => {
       // In a real implementation with admin API:
       // const { error } = await supabase.auth.admin.deleteUser(userId);
 
-      alert('User deletion would be implemented with Supabase admin API');
+      setNotice('Deleting users is not wired up yet.');
       fetchUsers(); // Refresh list
     } catch (err) {
       setError(err.message);
@@ -154,7 +158,7 @@ const AdminOverview = () => {
   const handleEnableUser = async (userId) => {
     try {
       // Similar to disable, would update app_metadata
-      alert('User enable would be implemented with Supabase admin API');
+      setNotice('Enabling users is not wired up yet.');
       fetchUsers(); // Refresh list
     } catch (err) {
       setError(err.message);
@@ -167,294 +171,294 @@ const AdminOverview = () => {
     fetchSystemStats();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="admin-overview-page">
-        <div className="admin-header">
-          <h1>Admin Overview</h1>
-          <p>Welcome, {userName}</p>
-        </div>
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading admin overview...</p>
-        </div>
+  const renderHeader = () => (
+    <header className="page-header">
+      <div>
+        <h1 className="page-title">Admin Overview</h1>
+        <p className="page-subtitle">Welcome, {userName}</p>
       </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="admin-overview-page">
-        <div className="admin-header">
-          <h1>Admin Overview</h1>
-          <p>Welcome, {userName}</p>
-        </div>
-        <div className="error-container">
-          <h2>Error Loading Data</h2>
-          <p>{error}</p>
-          <button onClick={() => {
-            setError(null);
-            fetchUsers();
-            fetchSystemStats();
-          }} className="btn-retry">
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
+    </header>
+  );
 
   return (
-    <div className="admin-overview-page">
-      <div className="admin-header">
-        <h1>Admin Overview</h1>
-        <p>Welcome, {userName}</p>
-      </div>
+    <div className="app-shell">
+      <Sidebar />
 
-      <div className="admin-content">
-        {/* System Status Section */}
-        <section className="stats-section">
-          <h2>System Status</h2>
-          <div className="stats-grid">
-            <div className="stat-card">
-              <h3>Active Accounts</h3>
-              <p className="stat-value">{systemStats.activeAccounts}</p>
-            </div>
-            <div className="stat-card">
-              <h3>Dataset Size</h3>
-              <p className="stat-value">{systemStats.datasetSize}</p>
-            </div>
-            <div className="stat-card">
-              <h3>Blingify Partner</h3>
-              <p className="stat-value">{systemStats.partnerOptIn ? 'Connected' : 'Not Connected'}</p>
-            </div>
-            <div className="stat-card">
-              <h3>Trend API Status</h3>
-              <p className="stat-value">{systemStats.trendApiStatus}</p>
-              <span className={`status-indicator ${systemStats.trendApiStatus === 'healthy' ? 'healthy' : 'unhealthy'}`}>
-                {systemStats.trendApiStatus === 'healthy' ? '●' : '●'}
-              </span>
-            </div>
+      <main className="app-main">
+        {loading ? (
+          <div className="admin-loading">
+            <div className="loading-spinner"></div>
+            <p>Loading admin overview...</p>
           </div>
-        </section>
-
-        {/* User Management Section */}
-        <section className="users-section">
-          <h2>User Management</h2>
-          <div className="user-actions">
-            <button
-              onClick={() => setShowAddUserModal(true)}
-              className="btn-add-user"
-            >
-              + Add New User
-            </button>
-          </div>
-
-          <div className="users-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Joined</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.length > 0 ? (
-                  users.map(user => (
-                    <tr key={user.id}>
-                      <td>{user.full_name || 'No Name Provided'}</td>
-                      <td>{user.email}</td>
-                      <td>
-                        <span className={`role-badge ${user.role}`}>
-                          {user.role.replace('_', ' ').toUpperCase()}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`status-badge ${user.status}`}>
-                          {user.status.replace('_', ' ').toUpperCase()}
-                        </span>
-                      </td>
-                      <td>{new Date(user.created_at).toLocaleDateString()}</td>
-                      <td className="user-actions-cell">
-                        <button
-                          onClick={() => {
-                            setEditUserData(user);
-                            setShowEditUserModal(true);
-                          }}
-                          className="btn-edit"
-                        >
-                          Edit
-                        </button>
-                        {user.status === 'active' ? (
-                          <button
-                            onClick={() => handleDisableUser(user.id)}
-                            className="btn-disable"
-                          >
-                            Disable
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => handleEnableUser(user.id)}
-                            className="btn-enable"
-                          >
-                            Enable
-                          </button>
-                        )}
-                        <button
-                          onClick={() => handleDeleteUser(user.id)}
-                          className="btn-delete"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" className="no-users">
-                      No users found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-
-      {/* Add User Modal */}
-      {showAddUserModal && (
-        <div className="modal-backdrop" onClick={() => setShowAddUserModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Add New User</h3>
-              <button onClick={() => setShowAddUserModal(false)} className="btn-close">
-                ×
+        ) : error ? (
+          <>
+            {renderHeader()}
+            <div className="status-banner">
+              <span>{error}</span>
+              <button onClick={() => {
+                setError(null);
+                fetchUsers();
+                fetchSystemStats();
+              }} className="btn-secondary">
+                Try Again
               </button>
             </div>
-            <div className="modal-body">
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                const userData = {
-                  email: formData.get('email'),
-                  password: formData.get('password'),
-                  full_name: formData.get('full_name'),
-                  role: formData.get('role')
-                };
-                handleAddUser(userData);
-              }}>
-                <div className="form-group">
-                  <label>Email:</label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Password:</label>
-                  <input
-                    type="password"
-                    name="password"
-                    required
-                    minLength="6"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Full Name:</label>
-                  <input
-                    type="text"
-                    name="full_name"
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Role:</label>
-                  <select name="role" required>
-                    <option value="admin">Admin</option>
-                    <option value="content_creator">Content Creator</option>
-                  </select>
-                </div>
-                <div className="modal-form-actions">
-                  <button type="button" onClick={() => setShowAddUserModal(false)} className="btn-secondary">
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn-primary">
-                    Add User
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
+          </>
+        ) : (
+          <>
+            {renderHeader()}
 
-      {/* Edit User Modal */}
-      {showEditUserModal && editUserData && (
-        <div className="modal-backdrop" onClick={() => setShowEditUserModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Edit User</h3>
-              <button onClick={() => setShowEditUserModal(false)} className="btn-close">
-                ×
-              </button>
+            {notice && (
+              <div className="status-banner success">
+                <span>{notice}</span>
+                <button onClick={() => setNotice('')} className="btn-error-close" aria-label="Dismiss">×</button>
+              </div>
+            )}
+
+            <div className="admin-content">
+              {/* System Status Section */}
+              <section className="admin-section">
+                <h2 className="section-title">System Status</h2>
+                <div className="stats-grid">
+                  <div className="stat-box">
+                    <div className="stat-label">Active Accounts</div>
+                    <div className="stat-value">{systemStats.activeAccounts}</div>
+                  </div>
+                  <div className="stat-box">
+                    <div className="stat-label">Dataset Size</div>
+                    <div className="stat-value">{systemStats.datasetSize}</div>
+                  </div>
+                  <div className="stat-box">
+                    <div className="stat-label">Blingify Partner</div>
+                    <div className="stat-value stat-value-sm">{systemStats.partnerOptIn ? 'Connected' : 'Not Connected'}</div>
+                  </div>
+                  <div className="stat-box">
+                    <div className="stat-label">Trend API Status</div>
+                    <div className="stat-value stat-value-sm">{systemStats.trendApiStatus}</div>
+                  </div>
+                </div>
+              </section>
+
+              {/* User Management Section */}
+              <section className="admin-section">
+                <h2 className="section-title">User Management</h2>
+                <div className="user-actions">
+                  <button
+                    onClick={() => setShowAddUserModal(true)}
+                    className="btn-primary"
+                  >
+                    Add New User
+                  </button>
+                </div>
+
+                <div className="users-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.length > 0 ? (
+                        users.map(user => (
+                          <tr key={user.id}>
+                            <td>{user.full_name || 'No Name Provided'}</td>
+                            <td>{user.email}</td>
+                            <td>
+                              <span className={`role-badge ${user.role}`}>
+                                {user.role.replace('_', ' ')}
+                              </span>
+                            </td>
+                            <td>
+                              <span className={`status-badge ${user.status}`}>
+                                {user.status.replace('_', ' ')}
+                              </span>
+                            </td>
+                            <td>{new Date(user.created_at).toLocaleDateString()}</td>
+                            <td className="user-actions-cell">
+                              <button
+                                onClick={() => {
+                                  setEditUserData(user);
+                                  setShowEditUserModal(true);
+                                }}
+                                className="btn-edit"
+                              >
+                                Edit
+                              </button>
+                              {user.status === 'active' ? (
+                                <button
+                                  onClick={() => handleDisableUser(user.id)}
+                                  className="btn-edit"
+                                >
+                                  Disable
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => handleEnableUser(user.id)}
+                                  className="btn-edit"
+                                >
+                                  Enable
+                                </button>
+                              )}
+                              <button
+                                onClick={() => handleDeleteUser(user.id)}
+                                className="btn-delete"
+                              >
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6" className="no-users">
+                            No users found
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
             </div>
-            <div className="modal-body">
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                const updates = {
-                  full_name: formData.get('full_name'),
-                  role: formData.get('role')
-                };
-                handleUpdateUser(editUserData.id, updates);
-              }}>
-                <div className="form-group">
-                  <label>Email:</label>
-                  <input
-                    type="email"
-                    value={editUserData.email}
-                    readOnly
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Full Name:</label>
-                  <input
-                    type="text"
-                    name="full_name"
-                    value={editUserData.full_name || ''}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Role:</label>
-                  <select name="role" required>
-                    <option value="admin" selected={editUserData.role === 'admin'}>
-                      Admin
-                    </option>
-                    <option value="content_creator" selected={editUserData.role === 'content_creator'}>
-                      Content Creator
-                    </option>
-                  </select>
-                </div>
-                <div className="modal-form-actions">
-                  <button type="button" onClick={() => setShowEditUserModal(false)} className="btn-secondary">
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn-primary">
-                    Update User
-                  </button>
-                </div>
-              </form>
+          </>
+        )}
+
+        {/* Add User Modal */}
+        {showAddUserModal && (
+          <div className="modal-backdrop" onClick={() => setShowAddUserModal(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Add New User</h3>
+                <button onClick={() => setShowAddUserModal(false)} className="btn-close">
+                  ×
+                </button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target);
+                  const userData = {
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                    full_name: formData.get('full_name'),
+                    role: formData.get('role')
+                  };
+                  handleAddUser(userData);
+                }}>
+                  <div className="form-group">
+                    <label htmlFor="add-email">Email</label>
+                    <input
+                      type="email"
+                      id="add-email"
+                      name="email"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="add-password">Password</label>
+                    <input
+                      type="password"
+                      id="add-password"
+                      name="password"
+                      required
+                      minLength="6"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="add-name">Full Name</label>
+                    <input
+                      type="text"
+                      id="add-name"
+                      name="full_name"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="add-role">Role</label>
+                    <select id="add-role" name="role" required>
+                      <option value="admin">Admin</option>
+                      <option value="content_creator">Content Creator</option>
+                    </select>
+                  </div>
+                  <div className="modal-form-actions">
+                    <button type="button" onClick={() => setShowAddUserModal(false)} className="btn-secondary">
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn-primary">
+                      Add User
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Edit User Modal */}
+        {showEditUserModal && editUserData && (
+          <div className="modal-backdrop" onClick={() => setShowEditUserModal(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Edit User</h3>
+                <button onClick={() => setShowEditUserModal(false)} className="btn-close">
+                  ×
+                </button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target);
+                  const updates = {
+                    full_name: formData.get('full_name'),
+                    role: formData.get('role')
+                  };
+                  handleUpdateUser(editUserData.id, updates);
+                }}>
+                  <div className="form-group">
+                    <label>Email</label>
+                    <input
+                      type="email"
+                      value={editUserData.email}
+                      readOnly
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="edit-name">Full Name</label>
+                    <input
+                      type="text"
+                      id="edit-name"
+                      name="full_name"
+                      value={editUserData.full_name || ''}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="edit-role">Role</label>
+                    <select id="edit-role" name="role" defaultValue={editUserData.role} required>
+                      <option value="admin">Admin</option>
+                      <option value="content_creator">Content Creator</option>
+                    </select>
+                  </div>
+                  <div className="modal-form-actions">
+                    <button type="button" onClick={() => setShowEditUserModal(false)} className="btn-secondary">
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn-primary">
+                      Update User
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 };

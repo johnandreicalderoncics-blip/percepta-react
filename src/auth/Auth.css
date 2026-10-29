@@ -7,24 +7,11 @@
   align-items: stretch;
 }
 
-.auth-logo { grid-column: 1 / -1; text-align: center; }
+.auth-logo { grid-column: 1 / -1; text-align: center; margin-bottom: 1.5rem; }
 
 .auth-form { display: flex; flex-direction: column; gap: 1.25rem; }
 
 .form-footer { display: flex; justify-content: flex-end; margin-top: -0.5rem; }
-.forgot-link { font-size: 0.95rem; }
-
-.auth-divider {
-  display: flex;
-  align-items: center;
-  margin: 1.5rem 0 0;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-.auth-divider::before,
-.auth-divider::after { content: ''; flex: 1; border-bottom: 2.5px dashed var(--ink); opacity: 0.35; }
-.auth-divider span { padding: 0 1rem; }
 
 /* Info panel: lavender block, like a blingify feed tile */
 .auth-info {
@@ -44,8 +31,6 @@
   margin: 0 0 1rem;
   text-wrap: balance;
 }
-.highlight { color: inherit; }
-
 .info-content p { color: var(--ink); line-height: 1.6; margin: 0 0 2rem; }
 
 .info-stats { display: flex; flex-direction: column; gap: 1rem; }
@@ -61,8 +46,6 @@
   box-shadow: var(--shadow-sm);
 }
 .info-stat:nth-child(2) { background: var(--butter); }
-
-.info-icon { font-size: 1.9rem; line-height: 1; }
 .info-text { display: flex; flex-direction: column; }
 .info-number { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; line-height: 1.1; }
 .info-label { font-size: 0.95rem; color: var(--ink); }
