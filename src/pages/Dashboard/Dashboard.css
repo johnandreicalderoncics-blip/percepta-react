@@ -1,6 +1,6 @@
 /* Dashboard content styles. The app shell, sidebar, page header, stat boxes
-   and platform score cards live in shared/components/Sidebar.css and
-   shared/styles/ui.css. */
+   and platform score cards live in components/Sidebar.css and
+   styles/ui.css. */
 
 .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start; }
 

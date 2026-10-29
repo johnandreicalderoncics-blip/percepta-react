@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../shared/contexts/AuthContext';
-import Sidebar from '../shared/components/Sidebar';
-import '../user/pages.css';
+import { useAuth } from '../../contexts/AuthContext';
+import Sidebar from '../../components/Sidebar';
+import '../../styles/pages.css';
 import './AdminOverview.css';
 
 const AdminOverview = () => {

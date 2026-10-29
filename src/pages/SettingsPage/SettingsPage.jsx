@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useAuth } from '../shared/contexts/AuthContext';
-import './pages.css';
+import { useAuth } from '../../contexts/AuthContext';
+import '../../styles/pages.css';
 
 const DEFAULT_SETTINGS = {
   notifications: true,

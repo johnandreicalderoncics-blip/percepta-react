@@ -1,18 +1,18 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './shared/contexts/AuthContext';
-import MainLayout from './shared/layouts/MainLayout';
-import ProtectedRoute from './shared/components/ProtectedRoute';
-import AdminProtectedRoute from './shared/components/AdminProtectedRoute';
-import Landing from './public/Landing';
-import Register from './auth/Register';
-import Verify from './auth/Verify';
-import ResetPassword from './auth/ResetPassword';
-import Dashboard from './user/Dashboard';
-import Trends from './user/Trends';
-import UploadPage from './user/UploadPage';
-import HistoryPage from './user/HistoryPage';
-import SettingsPage from './user/SettingsPage';
-import AdminOverview from './admin/AdminOverview';
+import { AuthProvider } from './contexts/AuthContext';
+import MainLayout from './components/MainLayout';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminProtectedRoute from './components/AdminProtectedRoute';
+import Landing from './pages/Landing/Landing';
+import Register from './pages/Register/Register';
+import Verify from './pages/Verify/Verify';
+import ResetPassword from './pages/ResetPassword/ResetPassword';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Trends from './pages/Trends/Trends';
+import UploadPage from './pages/UploadPage/UploadPage';
+import HistoryPage from './pages/HistoryPage/HistoryPage';
+import SettingsPage from './pages/SettingsPage/SettingsPage';
+import AdminOverview from './pages/AdminOverview/AdminOverview';
 
 function App() {
   return (

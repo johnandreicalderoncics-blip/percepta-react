@@ -1,5 +1,5 @@
 /* Trend monitor content styles. The app shell, sidebar and page header live
-   in shared/components/Sidebar.css and shared/styles/ui.css. */
+   in components/Sidebar.css and styles/ui.css. */
 
 .trends-loading {
   padding: 2rem;

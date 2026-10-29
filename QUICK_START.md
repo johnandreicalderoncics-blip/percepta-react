@@ -75,7 +75,7 @@ Try:
 - `.env` - Your Supabase credentials (NEVER commit this!)
 - `SUPABASE_SETUP.md` - Detailed setup guide
 - `src/lib/supabase.js` - Supabase client
-- `src/shared/contexts/AuthContext.jsx` - Auth management
+- `src/contexts/AuthContext.jsx` - Auth management
 
 ## 🐛 Common Issues
 
