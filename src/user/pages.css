@@ -46,6 +46,59 @@
 .btn-error-close:hover { background: rgba(0, 0, 0, 0.08); }
 
 /* ---------- Upload page ---------- */
+.metadata-card {
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.metadata-card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.metadata-card .section-title { margin: 0 0 0.25rem; }
+.metadata-required { color: var(--muted); font-size: 0.72rem; letter-spacing: 0.08em; }
+
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.metadata-grid textarea,
+.metadata-grid input {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--white);
+  border: 2px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 0.7rem 0.85rem;
+  resize: vertical;
+}
+
+.metadata-grid textarea:focus,
+.metadata-grid input:focus {
+  outline: 3px solid transparent;
+  box-shadow: 0 0 0 3px rgba(244, 167, 43, 0.35);
+}
+
+.score-breakdown {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+  margin: 0.9rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(18, 20, 44, 0.16);
+}
+
+.score-breakdown div { display: grid; gap: 0.15rem; }
+.score-breakdown dt { font-size: 0.7rem; color: var(--muted); }
+.score-breakdown dd { margin: 0; font-family: var(--font-mono); font-weight: 600; }
+
 .upload-actions { display: flex; flex-wrap: wrap; gap: 0.9rem; }
 
 .upload-area {
@@ -249,6 +302,8 @@
 .history-empty p { color: var(--ink-soft); margin: 0 0 1.5rem; }
 
 @media (max-width: 640px) {
+  .metadata-grid { grid-template-columns: 1fr; }
+  .metadata-card-heading { flex-direction: column; }
   .history-entry { flex-direction: column; align-items: stretch; }
 }
 

@@ -15,6 +15,35 @@
 
 .admin-section .stats-grid { margin-bottom: 0; }
 
+.admin-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.admin-section-heading .section-title { margin-bottom: 0.35rem; }
+.section-description { margin: 0; color: var(--ink-soft); }
+
+.trend-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.trend-status-grid div {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.85rem;
+  background: rgba(28, 42, 134, 0.06);
+  border: 1px solid rgba(18, 20, 44, 0.16);
+  border-radius: 10px;
+}
+
+.trend-status-grid span { color: var(--ink-soft); font-size: 0.8rem; }
+.trend-status-grid strong { font-family: var(--font-mono); font-size: 0.9rem; }
+
 .stat-value-sm { font-size: 1.5rem; }
 
 .user-actions { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
@@ -84,5 +113,7 @@
 .admin-loading { padding: 4rem 2rem; text-align: center; color: rgba(253, 252, 246, 0.85); }
 
 @media (max-width: 640px) {
+  .admin-section-heading { flex-direction: column; }
+  .trend-status-grid { grid-template-columns: 1fr; }
   .user-actions { justify-content: flex-start; }
 }
