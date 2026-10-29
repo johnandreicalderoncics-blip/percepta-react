@@ -12,6 +12,8 @@
   background: linear-gradient(180deg, #0e1450 0%, #12185a 100%);
   position: relative;
   isolation: isolate;
+  /* contains the offset orbital ring (::after) so it never widens the page */
+  overflow: hidden;
 }
 
 /* constellation: two quiet paper dot layers + one amber spark */
@@ -46,6 +48,14 @@
   position: relative;
   z-index: 1;
 }
+
+/* navy-surface text: headings that sit directly on the app background
+   instead of a paper card need paper color (ink is invisible on navy) */
+.app-main .page-title,
+.app-main .results-header h2 { color: var(--paper); }
+
+.app-main .page-subtitle,
+.app-main .results-date { color: rgba(253, 252, 246, 0.75); }
 
 /* --------------------------------------------------------------------------
    Cards: the hardcard recipe (paper plate, ink border, hard offset shadow)
@@ -105,10 +115,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* dark surfaces need a paper focus ring instead of amber-on-navy */
-.app-shell :focus-visible,
-.route-loading :focus-visible {
-  outline-color: var(--paper);
-}
+/* focus rings: the amber outline from index.css is used everywhere — on navy
+   it reads at ~9:1; on paper cards it is fainter (ledgered, deferred minor) */
 
 /* dark surfaces: light scrollbar thumb already set globally (#2c3a9e) */
