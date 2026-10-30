@@ -10,95 +10,56 @@ export const useAuth = () => {
   return context;
 };
 
+// All auth calls go to the Percepta backend, which owns the session: the
+// token lives in an HTTP-only cookie that JavaScript can never read, so
+// nothing sensitive is kept in localStorage or passed through this context.
+const authFetch = async (path, { method = 'POST', body } = {}) => {
+  const response = await fetch(`/api/auth${path}`, {
+    method,
+    credentials: 'include',
+    ...(body !== undefined
+      ? {
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        }
+      : {}),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || `Request failed (${response.status}).`);
+  }
+  return data;
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState(null); // always null: the session lives in a cookie
   const [loading, setLoading] = useState(true);
 
-  // Get the Supabase URL for Edge Function endpoints
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-
   useEffect(() => {
-    // Get initial session from localStorage or cookie
+    // Ask the backend who this browser is. 401 means no valid session.
     const initSession = async () => {
       try {
-        // Try to get session from localStorage (fallback if cookies not working)
-        const storedSession = localStorage.getItem('percepta_session');
-        if (storedSession) {
-          const sessionData = JSON.parse(storedSession);
-          // Validate session with Edge Function
-          const response = await fetch(`${supabaseUrl}/functions/v1/auth-session`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${sessionData.session_token}`
-            }
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setUser(data.user);
-            setSession(sessionData);
-            setLoading(false);
-            return;
-          }
-        }
-
-        // If no valid session, set loading to false
-        setLoading(false);
-      } catch (error) {
-        console.error('Session initialization error:', error);
+        const data = await authFetch('/me', { method: 'GET' });
+        setUser(data.user);
+      } catch {
+        setUser(null);
+      } finally {
         setLoading(false);
       }
     };
 
     initSession();
+  }, []);
 
-    // Listen for storage changes (for tab-to-tab communication)
-    const handleStorageChange = (e) => {
-      if (e.key === 'percepta_session') {
-        if (e.newValue) {
-          const sessionData = JSON.parse(e.newValue);
-          setSession(sessionData);
-          // User data will be fetched on next request via auth-session
-        } else {
-          setUser(null);
-          setSession(null);
-        }
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, [supabaseUrl]);
-
-  // Sign up with email and password
+  // Sign up with email and password. The response includes a devCode only
+  // when the backend runs with DEV_EXPOSE_OTP (no email provider in scope).
   const signUp = async (email, password, fullName) => {
     setLoading(true);
     try {
-      const response = await fetch(`${supabaseUrl}/functions/v1/auth-register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          name: fullName,
-          password: password
-        })
+      const data = await authFetch('/register', {
+        body: { email, name: fullName, password },
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
-      }
-
-      // For email verification flow, we might need to navigate to verify page
-      // The Edge Function will indicate if verification is required
       return { data, error: null };
     } catch (error) {
       console.error('Error signing up:', error);
@@ -108,40 +69,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Sign in with email and password
+  // Sign in with email and password; the backend sets the session cookie.
   const signIn = async (email, password) => {
     setLoading(true);
     try {
-      const response = await fetch(`${supabaseUrl}/functions/v1/auth-login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
-      }
-
-      // Store session data
-      const sessionData = {
-        user_id: data.user.user_id,
-        session_token: data.session_token,
-        expires_at: data.expires_at
-      };
-
+      const data = await authFetch('/login', { body: { email, password } });
       setUser(data.user);
-      setSession(sessionData);
-
-      // Store in localStorage for persistence and cross-tab sync
-      localStorage.setItem('percepta_session', JSON.stringify(sessionData));
-
       return { data, error: null };
     } catch (error) {
       console.error('Error signing in:', error);
@@ -151,33 +84,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Sign out
+  // Sign out: invalidate the session server-side and clear the cookie.
   const signOut = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${supabaseUrl}/functions/v1/auth-logout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // Send session token in Authorization header if available
-          ...(session && { 'Authorization': `Bearer ${session.session_token}` })
-        }
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Logout failed');
-      }
-
-      // Clear user data
+      await authFetch('/logout');
       setUser(null);
       setSession(null);
-
-      // Remove from localStorage
-      localStorage.removeItem('percepta_session');
-
-      return { data, error: null };
+      return { data: { ok: true }, error: null };
     } catch (error) {
       console.error('Error signing out:', error);
       return { data: null, error: error.message };
@@ -186,26 +100,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Reset password request
+  // Reset password request. The backend responds identically whether or not
+  // the email is registered (except a devCode in dev mode).
   const resetPassword = async (email) => {
     setLoading(true);
     try {
-      const response = await fetch(`${supabaseUrl}/functions/v1/auth-reset-request`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Reset request failed');
-      }
-
+      const data = await authFetch('/reset-request', { body: { email } });
       return { data, error: null };
     } catch (error) {
       console.error('Error resetting password:', error);
@@ -215,62 +115,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Update password (requires valid session)
+  // Password update is not implemented server-side yet (the backend has no
+  // password-change endpoint); this stays an honest stub.
   const updatePassword = async (_newPassword) => {
-    setLoading(true);
-    try {
-      // First verify the current session is valid
-      const sessionResponse = await fetch(`${supabaseUrl}/functions/v1/auth-session`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(session && { 'Authorization': `Bearer ${session.session_token}` })
-        }
-      });
-
-      if (!sessionResponse.ok) {
-        throw new Error('Invalid session');
-      }
-
-      // Then update the password using the reset confirm function with current session
-      // For password update, we need to verify the user's identity first
-      // In a real implementation, this would be a separate endpoint
-      // For now, we'll simulate by requiring re-authentication or using a different flow
-
-      // Since we don't have the old password, we can't directly update it
-      // This would typically require the old password for verification
-      // For simplicity in this example, we'll return an error indicating
-      // this needs to be implemented with proper old password verification
-      throw new Error('Password update requires old password verification - please use reset password flow instead');
-    } catch (error) {
-      console.error('Error updating password:', error);
-      return { data: null, error: error.message };
-    } finally {
-      setLoading(false);
-    }
+    const error = 'Password update requires old password verification - please use reset password flow instead';
+    return { data: null, error };
   };
 
-  // Verify OTP
+  // Verify OTP: consumes the email_verify code and opens the session.
   const verifyOtp = async (email, token) => {
     setLoading(true);
     try {
-      const response = await fetch(`${supabaseUrl}/functions/v1/auth-verify`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          token: token
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Verification failed');
-      }
-
+      const data = await authFetch('/verify', { body: { email, token } });
+      setUser(data.user);
       return { data, error: null };
     } catch (error) {
       console.error('Error verifying OTP:', error);
@@ -280,8 +137,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Check if user is admin
-  // Note: Role is now stored in the user_account table and returned by auth-session
+  // Check if user is admin (role comes from the user_account table via /api).
   const isAdmin = () => {
     return user?.role === 'admin';
   };

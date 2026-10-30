@@ -1,50 +1,70 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useApiQuery } from '../../hooks/useApiQuery';
+import {
+  deleteVideo,
+  deleteUserVideos,
+  fetchUserVideos,
+  toFriendlyError,
+} from '../../lib/api';
 import '../../styles/pages.css';
 
+const formatDate = (value) =>
+  new Date(value).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
+const titleFromFilename = (filename) => filename.replace(/\.[^/.]+$/, '');
+
 const HistoryPage = () => {
-  const [history, setHistory] = useState([]);
+  const { user } = useAuth();
+  const userId = user?.user_id;
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [actionError, setActionError] = useState(null);
+  const [clearing, setClearing] = useState(false);
 
-  // Fetch history data (mock implementation)
-  useEffect(() => {
-    const fetchHistory = async () => {
-      setLoading(true);
-      try {
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+  const {
+    data: videos,
+    loading,
+    error,
+    refetch,
+  } = useApiQuery(
+    () => (userId ? fetchUserVideos() : Promise.resolve([])),
+    [userId]
+  );
 
-        // Mock history data
-        const mockHistory = [
-          { id: 1, title: 'Summer Vibes', date: 'Sep 28, 2026', tiktok: 82, instagram: 78, duration: '0:15' },
-          { id: 2, title: 'Morning Routine', date: 'Sep 27, 2026', tiktok: 71, instagram: 85, duration: '0:30' },
-          { id: 3, title: 'Recipe Tutorial', date: 'Sep 26, 2026', tiktok: 88, instagram: 76, duration: '0:45' },
-          { id: 4, title: 'Dance Challenge', date: 'Sep 25, 2026', tiktok: 91, instagram: 82, duration: '0:20' },
-          { id: 5, title: 'Travel Vlog', date: 'Sep 24, 2026', tiktok: 67, instagram: 75, duration: '0:50' }
-        ];
-
-        setHistory(mockHistory);
-        setError(null);
-      } catch (err) {
-        setError('Failed to load history. Please try again later.');
-        console.error('Error fetching history:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchHistory();
-  }, []);
+  const history = (videos || []).map((video) => ({
+    id: video.video_id,
+    title: titleFromFilename(video.filename || 'Untitled video'),
+    date: video.uploaded_at ? formatDate(video.uploaded_at) : '—',
+    status: video.status || 'unknown',
+    caption: video.caption || '',
+  }));
 
   const handleDeleteHistory = async (id) => {
+    setActionError(null);
     try {
-      // In a real app, you would delete from database
-      setHistory(prev => prev.filter(item => item.id !== id));
-      setError(null);
+      await deleteVideo(id);
+      refetch();
     } catch (err) {
-      setError('Failed to delete item. Please try again.');
+      setActionError(toFriendlyError(err));
+    }
+  };
+
+  const handleClearAll = async () => {
+    if (!userId) return;
+    setActionError(null);
+    setClearing(true);
+    try {
+      await deleteUserVideos();
+      refetch();
+    } catch (err) {
+      setActionError(toFriendlyError(err));
+    } finally {
+      setClearing(false);
     }
   };
 
@@ -67,8 +87,15 @@ const HistoryPage = () => {
 
       {error && (
         <div className="status-banner">
-          <span>{error}</span>
-          <button onClick={() => setError(null)} className="btn-error-close" aria-label="Dismiss">×</button>
+          <span>{toFriendlyError(error)}</span>
+          <button onClick={() => refetch()} className="btn-error-close" aria-label="Retry">↻</button>
+        </div>
+      )}
+
+      {actionError && (
+        <div className="status-banner">
+          <span>{actionError}</span>
+          <button onClick={() => setActionError(null)} className="btn-error-close" aria-label="Dismiss">×</button>
         </div>
       )}
 
@@ -82,13 +109,16 @@ const HistoryPage = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button onClick={() => {
-              // In a real app, you would clear history
-              if (window.confirm('Delete all history?')) {
-                setHistory([]);
-              }
-            }} className="btn-danger">
-              Clear All
+            <button
+              onClick={() => {
+                if (window.confirm('Delete all history?')) {
+                  handleClearAll();
+                }
+              }}
+              className="btn-danger"
+              disabled={clearing}
+            >
+              {clearing ? 'Clearing...' : 'Clear All'}
             </button>
           </div>
 
@@ -98,14 +128,12 @@ const HistoryPage = () => {
                 <div className="history-entry-content">
                   <div className="entry-thumbnail" aria-hidden="true">
                     <span>{item.title.charAt(0)}</span>
-                    <span className="duration-badge mono">{item.duration}</span>
                   </div>
                   <div className="entry-details">
                     <h3 className="entry-title">{item.title}</h3>
                     <p className="entry-date mono">{item.date}</p>
                     <div className="entry-scores">
-                      <span className="mini-score tiktok">TikTok {item.tiktok}</span>
-                      <span className="mini-score instagram">IG {item.instagram}</span>
+                      <span className="mini-score">{item.status}</span>
                     </div>
                   </div>
                 </div>
@@ -125,13 +153,15 @@ const HistoryPage = () => {
           </div>
         </div>
       ) : (
-        <div className="history-empty">
-          <h3>No history yet</h3>
-          <p>Upload and analyze videos to see your history here.</p>
-          <Link to="/upload" className="btn-primary">
-            Upload First Video
-          </Link>
-        </div>
+        !error && (
+          <div className="history-empty">
+            <h3>No history yet</h3>
+            <p>Upload and analyze videos to see your history here.</p>
+            <Link to="/upload" className="btn-primary">
+              Upload First Video
+            </Link>
+          </div>
+        )
       )}
     </>
   );

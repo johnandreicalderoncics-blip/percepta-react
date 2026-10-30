@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { saveVideo, toFriendlyError } from '../../lib/api';
 import '../../styles/pages.css';
 
 const UploadPage = () => {
@@ -14,9 +15,13 @@ const UploadPage = () => {
     keywords: '',
     audioTitle: ''
   });
+  // Database persistence state for the current file: 'idle' | 'saving' | 'saved' | 'error'
+  const [saveState, setSaveState] = useState('idle');
+  const [saveError, setSaveError] = useState(null);
+  const savedVideoIdRef = useRef(null);
 
-  // Get user name from metadata or email
-  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  // Get user name from account or email
+  const userName = user?.name || user?.email?.split('@')[0] || 'User';
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -34,6 +39,9 @@ const UploadPage = () => {
 
       setUploadedVideo(file);
       setError(null);
+      setSaveState('idle');
+      setSaveError(null);
+      savedVideoIdRef.current = null;
       const video = document.createElement('video');
       video.preload = 'metadata';
       video.onloadedmetadata = () => {
@@ -77,6 +85,31 @@ const UploadPage = () => {
       };
 
       setAnalysisResult(mockResults);
+
+      // Persist the upload and its metadata through the backend API. The
+      // displayed scores are local estimates, but the saved record is real; a
+      // failed save is surfaced, never silently swallowed.
+      if (!savedVideoIdRef.current) {
+        setSaveState('saving');
+        setSaveError(null);
+        try {
+          if (!user) {
+            throw new Error('You must be signed in to save an analysis.');
+          }
+          const videoId = await saveVideo({
+            filename: file.name,
+            caption: metadata.caption,
+            hashtags: metadata.hashtags,
+            keywords: metadata.keywords,
+            audioTitle: metadata.audioTitle,
+          });
+          savedVideoIdRef.current = videoId;
+          setSaveState('saved');
+        } catch (saveErr) {
+          setSaveState('error');
+          setSaveError(toFriendlyError(saveErr));
+        }
+      }
     } catch (err) {
       setError('Analysis failed. Please try again.');
     } finally {
@@ -165,7 +198,23 @@ const UploadPage = () => {
           <section className="results-header">
             <h2>Analysis Results for "{analysisResult.videoTitle}"</h2>
             <p className="results-date mono">Analyzed on {analysisResult.uploadDate}</p>
+            <p className="results-note">
+              Scores below are preliminary local estimates — database-backed evaluation pending.
+            </p>
           </section>
+
+          {saveState === 'saving' && (
+            <div className="status-banner"><span>Saving to database...</span></div>
+          )}
+          {saveState === 'saved' && (
+            <div className="status-banner"><span>Saved to database ✓</span></div>
+          )}
+          {saveState === 'error' && (
+            <div className="status-banner">
+              <span>Not saved to database: {saveError}</span>
+              <button onClick={() => setSaveState('idle')} className="btn-error-close" aria-label="Dismiss">×</button>
+            </div>
+          )}
 
           <div className="platform-scores">
             {analysisResult.analysis.map((platform) => (
@@ -207,6 +256,9 @@ const UploadPage = () => {
             <button onClick={() => {
               setUploadedVideo(null);
               setAnalysisResult(null);
+              setSaveState('idle');
+              setSaveError(null);
+              savedVideoIdRef.current = null;
             }} className="btn-secondary">
               Upload Another Video
             </button>
@@ -224,7 +276,12 @@ const UploadPage = () => {
             <p className="mono">{uploadedVideo.type}</p>
           </div>
           <div className="upload-actions">
-            <button onClick={() => setUploadedVideo(null)} className="btn-secondary">
+            <button onClick={() => {
+              setUploadedVideo(null);
+              setSaveState('idle');
+              setSaveError(null);
+              savedVideoIdRef.current = null;
+            }} className="btn-secondary">
               Remove File
             </button>
             <button onClick={handleRetry} className="btn-primary btn-arrow" disabled={loading}>

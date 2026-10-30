@@ -5,7 +5,7 @@ import '../../styles/pages.css';
 import './AdminOverview.css';
 
 const AdminOverview = () => {
-  const { user, session } = useAuth();
+  const { user } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,20 +21,16 @@ const AdminOverview = () => {
   });
   const [trendRefreshState, setTrendRefreshState] = useState('idle');
 
-  // Get user name from metadata or email
-  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  // Get user name from account or email
+  const userName = user?.name || user?.email?.split('@')[0] || 'User';
 
-  const adminEndpoint = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users`;
-
-  const adminRequest = async (method = 'GET', body) => {
-    const response = await fetch(adminEndpoint, {
+  // User management goes through the backend's admin endpoints, authorized
+  // by the session cookie (the backend rejects non-admins with 403).
+  const adminRequest = async (method = 'GET', path = '/users', body) => {
+    const response = await fetch(`/api/admin${path}`, {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(session?.session_token
-          ? { Authorization: `Bearer ${session.session_token}` }
-          : {})
-      },
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
       ...(body ? { body: JSON.stringify(body) } : {})
     });
     const data = await response.json().catch(() => ({}));
@@ -44,47 +40,34 @@ const AdminOverview = () => {
     return data;
   };
 
-  // User management must go through a protected Edge Function.
+  const selfFallback = () => ({
+    id: user?.user_id,
+    email: user?.email,
+    full_name: user?.name || '',
+    role: user?.role || 'admin',
+    status: user?.status || 'active',
+    created_at: user?.consent_at || 'Unknown'
+  });
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
       const data = await adminRequest();
-      const authUsers = data.users || [];
+      const accounts = data.users || [];
 
-      // Format user data for display
-      // Check both app_metadata and user_metadata for role (for development flexibility)
-      const formattedUsers = authUsers.map(user => {
-        const role = user.app_metadata?.role ||
-                    user.user_metadata?.role ||
-                    'content_creator';
-        return {
-          id: user.id,
-          email: user.email,
-          full_name: user.user_metadata?.full_name || '',
-          role: role,
-          status: user.email_confirmed_at ? 'active' : 'unconfirmed',
-          created_at: user.created_at
-        };
-      });
+      const formattedUsers = accounts.map(account => ({
+        id: account.user_id,
+        email: account.email,
+        full_name: account.name || '',
+        role: account.role || 'user',
+        status: account.status || 'unknown',
+        created_at: account.consent_at || 'Unknown'
+      }));
 
-      setUsers(formattedUsers.length > 0 ? formattedUsers : [{
-        id: user.user_id || user.id,
-        email: user.email,
-        full_name: user.user_metadata?.full_name || user.name || '',
-        role: user.role || 'admin',
-        status: user.status || 'active',
-        created_at: user.created_at || 'Unknown'
-      }]);
+      setUsers(formattedUsers.length > 0 ? formattedUsers : [selfFallback()]);
       setError(null);
     } catch (err) {
-      setUsers(user ? [{
-        id: user.user_id || user.id,
-        email: user.email,
-        full_name: user.user_metadata?.full_name || user.name || '',
-        role: user.role || 'admin',
-        status: user.status || 'active',
-        created_at: user.created_at || 'Unknown'
-      }] : []);
+      setUsers(user ? [selfFallback()] : []);
       setError(`${err.message} Showing the signed-in administrator only.`);
       console.error('Error fetching users:', err);
     } finally {
@@ -108,19 +91,15 @@ const AdminOverview = () => {
     }
   };
 
-  // Handle adding a new user
+  // Handle adding a new user (the backend hashes the password)
   const handleAddUser = async (userData) => {
     try {
-      await adminRequest('POST', { action: 'create', user: userData });
-      // In a real implementation with admin API:
-      // const { data, error } = await supabase.auth.admin.createUser({
-      //   email: userData.email,
-      //   password: userData.password,
-      //   user_metadata: { full_name: userData.full_name },
-      //   app_metadata: { role: userData.role }
-      // });
-
-      // For now, we'll simulate and show a message
+      await adminRequest('POST', '/users', {
+        email: userData.email,
+        password: userData.password,
+        name: userData.full_name,
+        role: userData.role
+      });
       setNotice('User created.');
       setShowAddUserModal(false);
       fetchUsers(); // Refresh list
@@ -129,16 +108,13 @@ const AdminOverview = () => {
     }
   };
 
-  // Handle updating a user
+  // Handle updating a user (name and role; email/password are not editable)
   const handleUpdateUser = async (userId, updates) => {
     try {
-      await adminRequest('POST', { action: 'update', userId, updates });
-      // In a real implementation with admin API:
-      // const { data, error } = await supabase.auth.admin.updateUserById(userId, {
-      //   user_metadata: { full_name: updates.full_name },
-      //   app_metadata: { role: updates.role }
-      // });
-
+      await adminRequest('PATCH', `/users/${userId}`, {
+        name: updates.full_name,
+        role: updates.role
+      });
       setNotice('User updated.');
       setShowEditUserModal(false);
       fetchUsers(); // Refresh list
@@ -150,14 +126,7 @@ const AdminOverview = () => {
   // Handle disabling a user
   const handleDisableUser = async (userId) => {
     try {
-      await adminRequest('POST', { action: 'set-status', userId, status: 'disabled' });
-      // In a real implementation:
-      // const { data, error } = await supabase.auth.admin.updateUserById(userId, {
-      //   // This would typically involve setting a flag or using a custom approach
-      //   // Supabase doesn't have a direct "disable" flag, you might use custom metadata
-      //   app_metadata: { ...(await supabase.auth.admin.getUserById(userId)).data.user.app_metadata, status: 'disabled' }
-      // });
-
+      await adminRequest('PATCH', `/users/${userId}`, { status: 'disabled' });
       setNotice('User disabled.');
       fetchUsers(); // Refresh list
     } catch (err) {
@@ -168,10 +137,7 @@ const AdminOverview = () => {
   // Handle deleting a user
   const handleDeleteUser = async (userId) => {
     try {
-      await adminRequest('POST', { action: 'delete', userId });
-      // In a real implementation with admin API:
-      // const { error } = await supabase.auth.admin.deleteUser(userId);
-
+      await adminRequest('DELETE', `/users/${userId}`);
       setNotice('User deleted.');
       fetchUsers(); // Refresh list
     } catch (err) {
@@ -182,8 +148,7 @@ const AdminOverview = () => {
   // Handle enabling a user
   const handleEnableUser = async (userId) => {
     try {
-      await adminRequest('POST', { action: 'set-status', userId, status: 'active' });
-      // Similar to disable, would update app_metadata
+      await adminRequest('PATCH', `/users/${userId}`, { status: 'active' });
       setNotice('User enabled.');
       fetchUsers(); // Refresh list
     } catch (err) {
@@ -194,7 +159,7 @@ const AdminOverview = () => {
   const handleRefreshTrends = async () => {
     setTrendRefreshState('loading');
     try {
-      await adminRequest('POST', { action: 'refresh-trends' });
+      await adminRequest('POST', '/trends/refresh');
       setTrendRefreshState('success');
       setNotice('Trend collection refresh started.');
     } catch (err) {
@@ -430,8 +395,9 @@ const AdminOverview = () => {
                       type="password"
                       id="add-password"
                       name="password"
+                      placeholder="Min. 8 letters, uppercase, 1 number"
                       required
-                      minLength="6"
+                      minLength="8"
                     />
                   </div>
                   <div className="form-group">
@@ -447,7 +413,7 @@ const AdminOverview = () => {
                     <label htmlFor="add-role">Role</label>
                     <select id="add-role" name="role" required>
                       <option value="admin">Admin</option>
-                      <option value="content_creator">Content Creator</option>
+                      <option value="user">User</option>
                     </select>
                   </div>
                   <div className="modal-form-actions">
@@ -506,7 +472,7 @@ const AdminOverview = () => {
                     <label htmlFor="edit-role">Role</label>
                     <select id="edit-role" name="role" defaultValue={editUserData.role} required>
                       <option value="admin">Admin</option>
-                      <option value="content_creator">Content Creator</option>
+                      <option value="user">User</option>
                     </select>
                   </div>
                   <div className="modal-form-actions">

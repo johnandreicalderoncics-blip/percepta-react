@@ -15,7 +15,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { user, isAdmin, signOut } = useAuth();
 
-  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  const userName = user?.name || user?.email?.split('@')[0] || 'User';
 
   const handleLogout = async () => {
     const { error } = await signOut();

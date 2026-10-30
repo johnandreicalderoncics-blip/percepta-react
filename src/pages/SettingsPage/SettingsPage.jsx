@@ -16,8 +16,8 @@ const SettingsPage = () => {
   const [status, setStatus] = useState('');
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
-  // Get user name from metadata or email
-  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  // Get user name from account or email
+  const userName = user?.name || user?.email?.split('@')[0] || 'User';
 
   const handleSaveSettings = async () => {
     setIsSaving(true);

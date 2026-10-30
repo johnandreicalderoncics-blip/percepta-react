@@ -8,6 +8,7 @@ const Verify = () => {
   const location = useLocation();
   const { verifyOtp } = useAuth();
   const email = location.state?.email || '';
+  const devCode = location.state?.devCode || null;
 
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
@@ -72,6 +73,13 @@ const Verify = () => {
           <p className="verify-subtitle">
             Enter the 6-digit code we sent to {email || 'your registered email'}
           </p>
+
+          {devCode && (
+            <div className="form-error" role="status">
+              Dev mode (no email provider configured): your verification code is{' '}
+              <strong>{devCode}</strong>
+            </div>
+          )}
 
           {error && (
             <div className="form-error">

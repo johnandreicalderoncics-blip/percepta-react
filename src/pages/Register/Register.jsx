@@ -48,7 +48,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const { error: authError } = await signUp(
+      const { data: authData, error: authError } = await signUp(
         formData.email,
         formData.password,
         formData.fullName
@@ -57,8 +57,12 @@ const Register = () => {
       if (authError) {
         setError(authError);
       } else {
-        // Successfully registered, navigate to verify page
-        navigate('/verify', { state: { email: formData.email } });
+        // Successfully registered, navigate to verify page. The devCode is
+        // only present when the backend runs with DEV_EXPOSE_OTP (no email
+        // provider in scope), so the code can be shown instead of emailed.
+        navigate('/verify', {
+          state: { email: formData.email, devCode: authData?.devCode || null }
+        });
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
